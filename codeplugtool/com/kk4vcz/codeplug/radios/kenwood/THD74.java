@@ -45,7 +45,14 @@ public class THD74 implements CATRadio {
 	@Override
 	public void writeChannel(int index, Channel ch) throws IOException {
 		// TODO Auto-generated method stub
-		
+		THD74Channel channel=new THD74Channel(ch);
+		channel.setIndex(index);
+		String cmd=channel.render();
+		String res=transact(cmd);
+		if(!cmd.equals(res)) {
+			System.out.println("Command disagrees with response:\n"+cmd+"\n"+res);
+			System.exit(1);
+		}
 	}
 	
 

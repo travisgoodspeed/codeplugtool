@@ -101,14 +101,13 @@ public class Main {
 
 	public static void testCSV() {
 		try {
-			// FileInputStream in = new FileInputStream("knoxville.csv");
 			File f = new File("knoxville.csv");
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 
-			// Toss the first line.
+			// Toss the first line, which contains the header.
 			reader.readLine();
-
-			for (int i = 0; i < 11; i++) {
+			// Print the body lines.
+			while(reader.ready()) {
 				Channel c = new CSVChannel(reader.readLine());
 				if (c != null)
 					System.out.println(RenderChannel(c));
@@ -125,8 +124,8 @@ public class Main {
 	public static void main(String[] args) {
 		System.out.println("Codeplug Tool by KK4VCZ and Friends");
 
-		testTHD74();
 		testCSV();
+		testTHD74();
 
 		// usage();
 	}

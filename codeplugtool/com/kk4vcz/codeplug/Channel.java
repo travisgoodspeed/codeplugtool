@@ -9,7 +9,6 @@ public interface Channel {
 	//Set this channel to the values of another.
 	void apply(Channel c);
 	
-	
 	//Channel number in memory.
 	int getIndex();
 	void setIndex(int i);
@@ -31,6 +30,9 @@ public interface Channel {
 	int getRXToneFreq();
 	boolean getToneSent();
 	boolean getToneRequired();
+	
+	int getToneFreq();
+	void setToneFreq(int freq);
 	
 	
 	//FM, FMN, FMW, AM, USB, LSB, USB-D, LSB-D, DMR, P25, DSTAR, CW, R-CW, etc

@@ -128,6 +128,16 @@ public class CSVChannel implements Channel {
 	public void setName(String n) {
 		name=n;
 	}
+	@Override
+	public int getToneFreq() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void setToneFreq(int freq) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

@@ -68,7 +68,7 @@ public class THD74Channel implements Channel {
 	int p17=0; //CTCSS freq.
 	int p18=0; //DCS freq.
 	int p19=0; //Cross encode/decode.
-	String p20=""; //DSTAR call.
+	String p20="CQCQCQ"; //DSTAR call.
 	int p21=0; //DSTAR squelch type.
 	int p22=0; //DSTAR squelch code.
 	int p23=0; //lockout 
@@ -85,7 +85,7 @@ public class THD74Channel implements Channel {
 		
 	}
 	
-	private String render() throws IOException {
+	public String render() throws IOException {
 		/* This reproduces the original command, so that we can write it back to the radio.
 		 */
 		
@@ -158,7 +158,9 @@ public class THD74Channel implements Channel {
 		*/
 	}
 	
-	
+	public THD74Channel(Channel ch) throws IOException {
+		apply(ch);
+	}
 	public THD74Channel(String row) throws IOException {
 		parse(row);
 	}
@@ -320,15 +322,28 @@ public class THD74Channel implements Channel {
 	}
 
 
+	//TODO Names aren't part of the entry string.  Not sure what to do about that.
+	String name="";
+	
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 
 	@Override
 	public void setName(String n) {
+		name=n;
+	}
+
+	@Override
+	public int getToneFreq() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setToneFreq(int freq) {
 		// TODO Auto-generated method stub
 		
 	}
