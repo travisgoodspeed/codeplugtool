@@ -1,5 +1,9 @@
 package com.kk4vcz.codeplug;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 //We use this library in command-line Linux, but try not to have radio classes depend upon it.
@@ -16,22 +20,60 @@ import com.kk4vcz.codeplug.radios.kenwood.THD74;
  */
 
 public class Main {
-	public static SerialPort port;
-	public static CATRadio radio;
 
-	public static void main(String[] args) {
-		System.out.println("Codeplug Tool by KK4VCZ and Friends");
+	// Utility function to apply the values of the second parameter to the first.
+	public static void ApplyChannel(Channel dst, Channel src) {
+		dst.setRXFrequency(src.getRXFrequency());
+		dst.setOffset(src.getSplitDir(), src.getOffset());
+		dst.setIndex(src.getIndex());
+		dst.setName(src.getName());
+	}
 
+	// Utility function to print a channel.
+	public static String RenderChannel(Channel c) {
+		String freq;
+
+		if (c == null)
+			return "EMPTY";
+
+		String splitdir = c.getSplitDir();
+		if (splitdir.equals("split")) {
+			freq = String.format("%f MHz (TX %f MHz)", c.getRXFrequency() / 1000000.0,
+					c.getTXFrequency() / 1000000.0);
+		} else if (splitdir.equals("+") || splitdir.equals("-")) {
+			freq = String.format("%f MHz (TX %s%f MHz)", c.getRXFrequency() / 1000000.0,
+					splitdir, c.getOffset() / 1000000.0);
+		} else { // Simplex
+			freq = String.format("%f MHz", c.getRXFrequency() / 1000000.0,
+					c.getTXFrequency() / 1000000.0);
+		}
+		
+		/*
+		System.out.format("# Channel %03d\n", c.getIndex());
+		System.out.format("# %f MHz %s (TX %f MHz)\n", c.getRXFrequency() / 1000000.0, c.getMode(),
+				c.getTXFrequency() / 1000000.0);
+		if (c.getToneSent())
+			System.out.format("# TX Tone %f\n", c.getTXToneFreq() / 10.0);
+		if (c.getToneRequired())
+			System.out.format("# RX Tone %f\n", c.getRXToneFreq() / 10.0);
+			*/
+		return String.format("%03d %s", c.getIndex(), freq);
+	}
+
+	public static void testTHD74() {
 		try {
+			SerialPort port;
+			CATRadio radio;
+
 			port = SerialPort.getCommPort("/dev/ttyACM0");
 			port.setBaudRate(9600);
 			if (port.openPort()) {
-				port.setBaudRate(9600);				
+				port.setBaudRate(9600);
 				System.out.println("Opened port " + port.getSystemPortName());
-				
-				//1ms response time.
+
+				// 1ms response time.
 				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
-				
+
 				radio = new THD74(port.getInputStream(), port.getOutputStream());
 
 				System.out.println("Model:       " + radio.getID());
@@ -39,20 +81,52 @@ public class Main {
 				System.out.println("Serial:      " + radio.getSerialNumber());
 				System.out.println("Callsign:    " + radio.getCallsign());
 				System.out.println("Frequency:   " + radio.getFrequency());
-				
-				for(int i=0; i<11; i++) {
-					Channel c=radio.readChannel(i);
+
+				for (int i = 0; i < 11; i++) {
+					Channel c = radio.readChannel(i);
+					if (c != null)
+						System.out.println(RenderChannel(c));
 				}
 
 				System.out.println("done");
-				System.exit(0);
 			} else {
 				System.out.println("Failed to open " + port.getSystemPortName());
 				System.exit(1);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
+	}
+
+	public static void testCSV() {
+		try {
+			// FileInputStream in = new FileInputStream("knoxville.csv");
+			File f = new File("knoxville.csv");
+			BufferedReader reader = new BufferedReader(new FileReader(f));
+
+			// Toss the first line.
+			reader.readLine();
+
+			for (int i = 0; i < 11; i++) {
+				Channel c = new CSVChannel(reader.readLine());
+				if (c != null)
+					System.out.println(RenderChannel(c));
+			}
+			reader.close();
+
+			System.out.println("done");
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
+	public static void main(String[] args) {
+		System.out.println("Codeplug Tool by KK4VCZ and Friends");
+
+		testTHD74();
+		testCSV();
 
 		// usage();
 	}
@@ -67,5 +141,8 @@ public class Main {
 		System.out.println("Supported Radios:");
 		System.out.println("\tKenwood:");
 		System.out.println("\t\tTH-D74");
+		System.out.println("\tOther:");
+		System.out.println("\t\tCSV");
+
 	}
 }

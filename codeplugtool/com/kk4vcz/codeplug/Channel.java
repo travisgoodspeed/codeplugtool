@@ -6,6 +6,10 @@ package com.kk4vcz.codeplug;
  */
 
 public interface Channel {
+	//Set this channel to the values of another.
+	void apply(Channel c);
+	
+	
 	//Channel number in memory.
 	int getIndex();
 	void setIndex(int i);

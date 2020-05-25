@@ -19,9 +19,10 @@ public class CSVChannel implements Channel {
 		 * This is an ugly-ass shotgun parser.  It should be rewirtten properly when time allows.
 		 */
 		String[] words=line.split(",");
+		setIndex(Integer.parseInt(words[0]));
 		setName(words[1]);
-		setRXFrequency((long) Float.parseFloat(words[2])*1000000);
-		setOffset(words[3], (long) Double.parseDouble(words[4])*1000000);
+		setRXFrequency((long) (Double.parseDouble(words[2])*1000000.0));
+		setOffset(words[3], (long) (Double.parseDouble(words[4])*1000000.0));
 		
 		//TODO tones
 		//TODO Mode
@@ -29,6 +30,11 @@ public class CSVChannel implements Channel {
 	}
 	public CSVChannel(String line) {
 		parse(line);
+	}
+	
+	public void apply(Channel c) {
+		Main.ApplyChannel(this, c);;
+		
 	}
 
 	private int index=0;

@@ -73,6 +73,18 @@ public class THD74Channel implements Channel {
 	int p22=0; //DSTAR squelch code.
 	int p23=0; //lockout 
 	
+	public void apply(Channel c) {
+		/*
+		 * Imports the values of another channel.
+		 * Multiple inheritance would've been nice for this.
+		 */
+		setRXFrequency(c.getRXFrequency());
+		setOffset(c.getSplitDir(), c.getOffset());
+		setIndex(c.getIndex());
+		setName(c.getName());
+		
+	}
+	
 	private String render() throws IOException {
 		/* This reproduces the original command, so that we can write it back to the radio.
 		 */
@@ -94,7 +106,7 @@ public class THD74Channel implements Channel {
 	private void parse(String row) throws IOException {
 		//We add one extra word, then compare the result.
 		String[] words=("wasted,"+row.substring(3)).split(",");
-		System.out.format("# %s\n", row);
+		//System.out.format("# %s\n", row);
 		
 		if(words.length!=24) {
 			throw new IOException(String.format("ERROR: %d words, not the 23 expected\n", words.length));
@@ -128,11 +140,13 @@ public class THD74Channel implements Channel {
 		//Regenerate the string tomake sure we parsed it right.
 		if(!render().contentEquals(row)) {
 			System.out.println("# WARNING: Rendered string disagrees with source!");
+			System.out.format("# %s\n", row);
 			System.out.format("# %s\n", render());
 		}
 		
 		
 		//Print the results.
+		/*
 		System.out.format("# Channel %03d\n", p1);
 		System.out.format("# %f MHz %s (TX %f MHz)\n",
 				getRXFrequency()/1000000.0, getMode(),
@@ -141,7 +155,7 @@ public class THD74Channel implements Channel {
 			System.out.format("# TX Tone %f\n", getTXToneFreq()/10.0);
 		if(getToneRequired())
 			System.out.format("# RX Tone %f\n", getRXToneFreq()/10.0);
-		
+		*/
 	}
 	
 	

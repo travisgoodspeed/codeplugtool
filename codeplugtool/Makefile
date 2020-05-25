@@ -5,6 +5,7 @@ main?=$(JAVA) com.kk4vcz.codeplug.Main
 run:
 	$(main);
 
-d74test:
-	$(JAVA) com.kk4vcz.codeplug.Main TH-D74
+d74dump:
+	$(JAVA) com.kk4vcz.codeplug.Main TH-D74 /dev/ttyACM0 dump -
+
 
