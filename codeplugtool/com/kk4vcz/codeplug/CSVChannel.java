@@ -13,7 +13,6 @@ package com.kk4vcz.codeplug;
  */
 
 public class CSVChannel implements Channel {
-
 	private void parse(String line) {
 		/*
 		 * This is an ugly-ass shotgun parser.  It should be rewirtten properly when time allows.
@@ -25,16 +24,20 @@ public class CSVChannel implements Channel {
 		setOffset(words[3], (long) (Double.parseDouble(words[4])*1000000.0));
 		
 		//TODO tones
-		//TODO Mode
+		setToneFreq((int) (Double.parseDouble(words[6])*10));
+		String tm=words[5];
+		if(tm.equals(""))
+			setToneMode("");
+		else if(tm.equals("Tone"))
+			setToneMode("tone");
+		else
+			System.out.format("ERROR: %s is an unsupported CSV tone mode.\n", tm);
+		
+		setMode(words[10]);
 		//TODO URCALL
 	}
 	public CSVChannel(String line) {
 		parse(line);
-	}
-	
-	public void apply(Channel c) {
-		Main.ApplyChannel(this, c);;
-		
 	}
 
 	private int index=0;
@@ -80,34 +83,14 @@ public class CSVChannel implements Channel {
 		return offset;
 	}
 
-	@Override
-	public int getTXToneFreq() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getRXToneFreq() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean getToneSent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean getToneRequired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	private String mode="FM";
 	@Override
 	public String getMode() {
 		return mode;
+	}
+	@Override
+	public void setMode(String m) {
+		mode=m;
 	}
 	@Override
 	public void setRXFrequency(long freq) {
@@ -128,16 +111,33 @@ public class CSVChannel implements Channel {
 	public void setName(String n) {
 		name=n;
 	}
+	
+	int tonefreq=0;
 	@Override
 	public int getToneFreq() {
-		// TODO Auto-generated method stub
-		return 0;
+		return tonefreq;
 	}
 	@Override
 	public void setToneFreq(int freq) {
-		// TODO Auto-generated method stub
-		
+		tonefreq=freq;
 	}
+	
+	String tonemode="";
+	@Override
+	public String getToneMode() {
+		return tonemode;
+	}
+	@Override
+	public void setToneMode(String mode) {
+		if(mode.equals("") || mode.equals("tone") || mode.equals("ct")) {
+			tonemode=mode;
+			return;
+		}
+		
+		System.out.format("ERROR: %s isn't a known tone mode.  Defaulting to none.\n", mode);
+		tonemode="";
+	}
+	
 	
 
 }

@@ -40,7 +40,6 @@ public class CommandLineInterface {
 		while(reader.ready()) {
 			Channel c = new CSVChannel(reader.readLine());
 			if (c != null) {
-				System.out.println(Main.RenderChannel(c));
 				radio.writeChannel(c.getIndex(), c);
 			}
 		}

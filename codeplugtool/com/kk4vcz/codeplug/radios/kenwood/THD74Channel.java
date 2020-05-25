@@ -3,6 +3,7 @@ package com.kk4vcz.codeplug.radios.kenwood;
 import java.io.IOException;
 
 import com.kk4vcz.codeplug.Channel;
+import com.kk4vcz.codeplug.Main;
 
 /*
  * This implements the Channel abstraction as used in the Kenwood TH-D74 HT.  Experiments have
@@ -20,9 +21,9 @@ public class THD74Channel implements Channel {
 	 * ME 001,0146520000,0000600000,0,0,0,0,1,0,0,0,0,0,0,0,08,08,000,0,CQCQCQ,0,00,0
 	 * ME 002,0146520000,0000600000,0,0,0,0,1,1,0,0,0,0,0,0,12,08,000,0,CQCQCQ,0,00,0
 	 * 
-	 * ME  p1,        p2,        p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13,   ??   p14,  p15, p16, p17, p18,    p19, p20,p21,p22
-	 * ME 010,0145370000,0000600000,  0,  0,  0,  0,  1,  0,   0,   0,   0,   0,   0,   2,    08,  08, 000,   0, CQCQCQ,   0, 00,  0
-	 * ME 002,0146520000,0000600000,  0,  0,  0,  0,  1,  1,   0,   0,   0,   0,   0,   0,  12,  08, 000,   0, CQCQCQ,   0, 00,  0
+	 * ME  p1,        p2,        p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14,  p15,  p16, p17,  p18, p19,    p20, p21, p22, p23
+	 * ME 010,0145370000,0000600000,  0,  0,  0,  0,  1,  0,   0,   0,   0,   0,   0,   2,    08,  08,  000,   0, CQCQCQ,   0,  00,   0
+	 * ME 002,0146520000,0000600000,  0,  0,  0,  0,  1,  1,   0,   0,   0,   0,   0,   0,    12,  08,  000,   0, CQCQCQ,   0,  00,   0
 	 * 
 	 * p1  -- 3 digit channel number, 000-999
 	 * p2  -- 10 digit freq in Hz.
@@ -73,17 +74,6 @@ public class THD74Channel implements Channel {
 	int p22=0; //DSTAR squelch code.
 	int p23=0; //lockout 
 	
-	public void apply(Channel c) {
-		/*
-		 * Imports the values of another channel.
-		 * Multiple inheritance would've been nice for this.
-		 */
-		setRXFrequency(c.getRXFrequency());
-		setOffset(c.getSplitDir(), c.getOffset());
-		setIndex(c.getIndex());
-		setName(c.getName());
-		
-	}
 	
 	public String render() throws IOException {
 		/* This reproduces the original command, so that we can write it back to the radio.
@@ -143,23 +133,10 @@ public class THD74Channel implements Channel {
 			System.out.format("# %s\n", row);
 			System.out.format("# %s\n", render());
 		}
-		
-		
-		//Print the results.
-		/*
-		System.out.format("# Channel %03d\n", p1);
-		System.out.format("# %f MHz %s (TX %f MHz)\n",
-				getRXFrequency()/1000000.0, getMode(),
-				getTXFrequency()/1000000.0 );
-		if(getToneSent())
-			System.out.format("# TX Tone %f\n", getTXToneFreq()/10.0);
-		if(getToneRequired())
-			System.out.format("# RX Tone %f\n", getRXToneFreq()/10.0);
-		*/
 	}
 	
 	public THD74Channel(Channel ch) throws IOException {
-		apply(ch);
+		Main.ApplyChannel(this, ch);
 	}
 	public THD74Channel(String row) throws IOException {
 		parse(row);
@@ -201,7 +178,7 @@ public class THD74Channel implements Channel {
 			p15=1; //Up
 			p3=freq;
 		} else if(dir.equals("-")) {
-			p15=2; //Up
+			p15=2; //Down
 			p3=freq;
 		} else if(dir.equals("split")) {
 			p15=3; //Split, maybe?
@@ -242,7 +219,7 @@ public class THD74Channel implements Channel {
 	}
 
 	static int tones[]= {
-			670,693, 719, 744,
+			670, 693, 719, 744,
 			770, 797, 825, 854,
 			885, 915, 948, 974,
 			1000, 1035, 1072, 1109,
@@ -262,7 +239,7 @@ public class THD74Channel implements Channel {
 	 * but p17 contains the tone in CT mode.  Return zero when no tone is enabled.
 	 */
 	
-	@Override
+	
 	public int getTXToneFreq() {
 		if(p9==1 && p10==0) // T mode, just transmitting the tone.
 			return tones[p16];
@@ -272,7 +249,6 @@ public class THD74Channel implements Channel {
 		//Other cases.
 		return 0;
 	}
-	@Override
 	public int getRXToneFreq() {
 		if(p9==1 && p10==0) // T mode doesn't demand a tone.
 			return 0;
@@ -281,8 +257,32 @@ public class THD74Channel implements Channel {
 		
 		return 0;
 	}
+	
+	@Override
+	public int getToneFreq() {
+		//Might be p17, might be p16.  This ends the decision.
+		return getTXToneFreq();
+	}
+	
 
 	@Override
+	public void setToneFreq(int freq) {
+		for(int i=0; i<tones.length; i++) {
+			if(tones[i]==freq) {
+				//Set both of the potential tones for now.
+				p16=i;
+				p17=i;
+				return;
+			}
+		}
+		
+		//We don't have to complain about a zero tone.
+		if(freq!=0)
+			System.out.format("Unsupported tone %f Hz.", freq/10.0);
+	}
+
+
+
 	public boolean getToneSent() {
 		if(p9==1 && p10==0) // T mode, just transmitting the tone.
 			return true;
@@ -293,20 +293,68 @@ public class THD74Channel implements Channel {
 		return false;
 	}
 
-	@Override
+
 	public boolean getToneRequired() {
 		if(p9==1 && p10==0) // T mode doesn't demand a tone.
 			return false;
 		if(p9==0 && p10==1) // CT mode, transmitting and receiving the tone.
 			return true;
 		
+		//Other cases.
 		return false;
 	}
+	
+	@Override
+	public String getToneMode() {
+		if(getToneRequired())
+			return "ct";
+		if(getToneSent())
+			return "tone";
+		return "";
+	}
 
-	static String modes[]= {"FM", "DSTAR", "AM", "LSB", "USB", "CW", "NFM", "DR", "WFM", "R-CW"};
+	@Override
+	public void setToneMode(String mode) {
+		if(mode.equals("tone")) {
+			p9=1;
+			p10=0;
+			p11=0;
+			p12=0;
+		}else if(mode.equals("ct")) {
+			p9=0;
+			p10=1;
+			p11=0;
+			p12=0;
+		}else if(mode.equals("")) {
+			p9=0;
+			p10=0;
+			p11=0;
+			p12=0;
+		}else {
+			System.out.format("ERROR: %s is not a supported tone mode.  Defaulting to none.", mode);
+			p9=0;
+			p10=0;
+			p11=0;
+			p12=0;
+		}
+	}
+
+	static String modes[]= {"FM", "DV", "AM", "LSB", "USB", "CW", "NFM", "DR", "WFM", "R-CW"};
 	@Override
 	public String getMode() {
 		return modes[p6];
+	}
+
+	@Override
+	public void setMode(String m) {
+		for(int i=0; i<modes.length; i++) {
+			if(m.equals(modes[i])) {
+				p6=i;
+				return;
+			}
+		}
+		System.out.format("ERROR: %s is not a supported mode.  Defaulting to FM.\n", m);
+		p6=0;
 	}
 
 
@@ -330,25 +378,9 @@ public class THD74Channel implements Channel {
 		return name;
 	}
 
-
 	@Override
 	public void setName(String n) {
 		name=n;
 	}
-
-	@Override
-	public int getToneFreq() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void setToneFreq(int freq) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 
 }

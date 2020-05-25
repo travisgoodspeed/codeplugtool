@@ -6,9 +6,6 @@ package com.kk4vcz.codeplug;
  */
 
 public interface Channel {
-	//Set this channel to the values of another.
-	void apply(Channel c);
-	
 	//Channel number in memory.
 	int getIndex();
 	void setIndex(int i);
@@ -26,15 +23,18 @@ public interface Channel {
 	void setOffset(String dir, long freq);
 	
 	//Tenths of a Hz.
-	int getTXToneFreq();
-	int getRXToneFreq();
-	boolean getToneSent();
-	boolean getToneRequired();
+	//int getTXToneFreq();
+	//int getRXToneFreq();
+	//boolean getToneSent();
+	//boolean getToneRequired();
 	
 	int getToneFreq();
 	void setToneFreq(int freq);
+	String getToneMode();          //"", "tone", or "ct"
+	void setToneMode(String mode);
 	
 	
 	//FM, FMN, FMW, AM, USB, LSB, USB-D, LSB-D, DMR, P25, DSTAR, CW, R-CW, etc
 	String getMode();
+	void setMode(String m);
 }

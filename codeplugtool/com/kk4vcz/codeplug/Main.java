@@ -27,11 +27,14 @@ public class Main {
 		dst.setOffset(src.getSplitDir(), src.getOffset());
 		dst.setIndex(src.getIndex());
 		dst.setName(src.getName());
+		dst.setToneFreq(src.getToneFreq());
+		dst.setToneMode(src.getToneMode());
 	}
 
 	// Utility function to print a channel.
 	public static String RenderChannel(Channel c) {
 		String freq;
+		String tone="";
 
 		if (c == null)
 			return "EMPTY";
@@ -48,16 +51,13 @@ public class Main {
 					c.getTXFrequency() / 1000000.0);
 		}
 		
-		/*
-		System.out.format("# Channel %03d\n", c.getIndex());
-		System.out.format("# %f MHz %s (TX %f MHz)\n", c.getRXFrequency() / 1000000.0, c.getMode(),
-				c.getTXFrequency() / 1000000.0);
-		if (c.getToneSent())
-			System.out.format("# TX Tone %f\n", c.getTXToneFreq() / 10.0);
-		if (c.getToneRequired())
-			System.out.format("# RX Tone %f\n", c.getRXToneFreq() / 10.0);
-			*/
-		return String.format("%03d %s", c.getIndex(), freq);
+		if(c.getToneMode().equals("tone")) {
+			tone=String.format("T%f", c.getToneFreq()/10.0);
+		}else if(c.getToneMode().equals("ct")) {
+			tone=String.format("CT%f", c.getToneFreq()/10.0);
+		}
+		
+		return String.format("%03d %s %s", c.getIndex(), freq, tone);
 	}
 
 	public static void testTHD74() {
@@ -126,22 +126,5 @@ public class Main {
 
 		testCSV();
 		testTHD74();
-
-		// usage();
-	}
-
-	public static void usage() {
-		System.out.println("Available ports:");
-		SerialPort[] ports = SerialPort.getCommPorts();
-		for (int i = 0; i < ports.length; i++) {
-			System.out.println("\t" + ports[i].getSystemPortName() + "\t" + ports[i].getDescriptivePortName());
-		}
-
-		System.out.println("Supported Radios:");
-		System.out.println("\tKenwood:");
-		System.out.println("\t\tTH-D74");
-		System.out.println("\tOther:");
-		System.out.println("\t\tCSV");
-
 	}
 }

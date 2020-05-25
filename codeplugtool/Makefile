@@ -4,7 +4,7 @@ main?=$(JAVA) com.kk4vcz.codeplug.Main
 cli?=$(JAVA) com.kk4vcz.codeplug.CommandLineInterface
 
 run:
-	$(main);
+	$(main)
 
 d74dump:
 	$(cli) d74 /dev/ttyACM0 info dump

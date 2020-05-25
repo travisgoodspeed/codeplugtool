@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 
 import com.kk4vcz.codeplug.CATRadio;
 import com.kk4vcz.codeplug.Channel;
+import com.kk4vcz.codeplug.Main;
 
 
 /*
@@ -46,6 +47,7 @@ public class THD74 implements CATRadio {
 	public void writeChannel(int index, Channel ch) throws IOException {
 		// TODO Auto-generated method stub
 		THD74Channel channel=new THD74Channel(ch);
+		System.out.println(Main.RenderChannel(channel));
 		channel.setIndex(index);
 		String cmd=channel.render();
 		String res=transact(cmd);
