@@ -27,12 +27,6 @@ public class THD74 implements CATRadio {
 	public THD74(InputStream is, OutputStream os) throws IOException {
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
-		
-		/*
-		writer.write("id\r\n");
-		writer.flush();
-		reader.readLine();
-		*/
 	}
 	
 	//Sends a command and returns the response.
@@ -46,6 +40,7 @@ public class THD74 implements CATRadio {
 		
 		return reader.readLine().strip();
 	}
+	
 
 	@Override
 	public void writeChannel(int index, Channel ch) throws IOException {
@@ -112,5 +107,11 @@ public class THD74 implements CATRadio {
 	@Override
 	public String getVersion() throws IOException {
 		return transact("fv").substring(3);
+	}
+
+	@Override
+	public String getSerialNumber() throws IOException {
+		String pair[]=transact("ae").substring(3).split(",");
+		return pair[0];
 	}
 }

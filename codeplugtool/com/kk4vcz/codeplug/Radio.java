@@ -12,4 +12,5 @@ public interface Radio {
 	public Channel readChannel(int index) throws IOException;
 	
 	public String getVersion() throws IOException;
+	public String getSerialNumber() throws IOException;
 }

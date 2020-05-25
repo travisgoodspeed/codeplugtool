@@ -27,5 +27,30 @@ TODO
 
 ## Examples
 
-TODO
+This is a quick example of the tool dumping my Kenwood TH-D74A.
 
+```
+Codeplug Tool by KK4VCZ and Friends
+Opened port ttyACM0
+Model:       TH-D74,K,4
+Version:     1.09
+Serial:      B9A10175
+Callsign:    KK4VCZ-1
+Frequency:   146520000
+# ME 001,0146520000,0000600000,0,0,0,0,1,0,0,0,0,0,0,0,08,08,000,0,CQCQCQ,0,00,0
+# Channel 001
+# 146.520000 MHz FM (TX 146.520000 MHz)
+# ME 002,0146520000,0000600000,0,0,0,0,1,1,0,0,0,0,0,0,12,08,000,0,CQCQCQ,0,00,0
+# Channel 002
+# 146.520000 MHz FM (TX 146.520000 MHz)
+# TX Tone 100.000000
+# ME 003,0146550000,0000600000,0,0,0,0,1,0,1,0,0,0,0,0,12,13,000,0,CQCQCQ,0,00,0
+# Channel 003
+# 146.550000 MHz FM (TX 146.550000 MHz)
+# TX Tone 103.500000
+# RX Tone 103.500000
+# ME 010,0145370000,0000600000,0,0,0,0,1,0,0,0,0,0,0,2,08,08,000,0,CQCQCQ,0,00,0
+# Channel 010
+# 145.370000 MHz FM (TX 144.770000 MHz)
+done
+```

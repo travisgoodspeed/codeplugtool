@@ -9,7 +9,8 @@ import com.kk4vcz.codeplug.radios.kenwood.THD74;
 /* Hey y'all,
  * 
  * This is a main class that can be run from the command line as a
- * stand alone .jar file.
+ * stand alone .jar file.  It is the only class that is allowed to use
+ * the jSerialComm driver.
  * 
  * --KK4VCZ
  */
@@ -35,7 +36,8 @@ public class Main {
 
 				System.out.println("Model:       " + radio.getID());
 				System.out.println("Version:     " + radio.getVersion());
-				System.out.println("Callsignl:   " + radio.getCallsign());
+				System.out.println("Serial:      " + radio.getSerialNumber());
+				System.out.println("Callsign:    " + radio.getCallsign());
 				System.out.println("Frequency:   " + radio.getFrequency());
 				
 				for(int i=0; i<11; i++) {
@@ -47,7 +49,6 @@ public class Main {
 			} else {
 				System.out.println("Failed to open " + port.getSystemPortName());
 				System.exit(1);
-				;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

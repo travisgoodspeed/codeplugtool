@@ -157,6 +157,52 @@ public class THD74Channel implements Channel {
 	public long getRXFrequency() {
 		return p2;
 	}
+	
+	@Override
+	public String getSplitDir() {
+		switch(p15) {
+		case 0: //simplex
+			return "";
+		case 1: //Up
+			return "+";
+		case 2: //Down
+			return "-";
+		case 3: //Split
+			return "split";
+		}
+		return "error";
+	}
+	
+	@Override
+	public void setRXFrequency(long freq) {
+		p2=freq;
+	}
+
+
+	@Override
+	public void setOffset(String dir, long freq) {
+		if(dir.equals("+")) {
+			p15=1; //Up
+			p3=freq;
+		} else if(dir.equals("-")) {
+			p15=2; //Up
+			p3=freq;
+		} else if(dir.equals("split")) {
+			p15=3; //Split, maybe?
+			p3=freq;
+		} else {
+			p15=0; //simplex
+		}
+		
+	}
+
+
+	@Override
+	public long getOffset() {
+		// Always the absolute value of the offset.
+		// Direction is read separately.
+		return p3;
+	}
 
 	@Override
 	public long getTXFrequency() {
@@ -196,7 +242,7 @@ public class THD74Channel implements Channel {
 	};
 	
 	/*
-	 * Tones are a little tricky.  p[16] contains the tone when just transmitting,
+	 * Tones are a little tricky.  p16 contains the tone when just transmitting,
 	 * but p17 contains the tone in CT mode.  Return zero when no tone is enabled.
 	 */
 	
@@ -246,5 +292,34 @@ public class THD74Channel implements Channel {
 	public String getMode() {
 		return modes[p6];
 	}
+
+
+	@Override
+	public int getIndex() {
+		return p1;
+	}
+
+
+	@Override
+	public void setIndex(int i) {
+		p1=i;
+	}
+
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setName(String n) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 
 }
