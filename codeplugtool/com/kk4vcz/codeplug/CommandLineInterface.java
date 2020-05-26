@@ -45,7 +45,7 @@ public class CommandLineInterface {
 	}
 	
 	public static void upload(Radio radio, String filename) throws IOException{
-		File f = new File("knoxville.csv");
+		File f = new File(filename);
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 
 		// Toss the first line, which contains the header.
