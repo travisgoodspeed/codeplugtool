@@ -115,6 +115,7 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
 105,W4GZX,146.925000,-,0.600000,Tone,114.8,88.5,023,NN,Auto,5.00,,"Cleveland, CARC Clubhouse",,,,
 106,KQ4E,145.450000,-,0.600000,Tone,141.3,141.3,023,NN,Auto,5.00,,Morristown,,,,
 107,N4AW,146.790000,-,0.600000,,88.5,88.5,023,NN,FM,5.00,,"Pickens, Sassafrass Mountain",,,,
+
 dell% java -jar CodePlugTool.jar d74 ttyACM0 upload knoxville.csv             
 000 146.010000 MHz 
 100 147.315000 MHz (TX +0.600000 MHz) 
@@ -130,3 +131,10 @@ dell% java -jar CodePlugTool.jar d74 ttyACM0 upload knoxville.csv
 110 147.240000 MHz (TX +0.600000 MHz) T151.400000
 ...
 ```
+
+## License
+
+If you use this code, you owe me one India Pale Ale.  If you complain
+that this isn't in the spirit of Free Software, you owe me a dozen of
+them.
+
