@@ -17,8 +17,22 @@ import com.kk4vcz.codeplug.radios.kenwood.THD74;
 
 public class CommandLineInterface {
 	public static void usage() {
-		System.out.println("Usage: \n" + "cpt [driver] [port/file] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
-				+ "\t\td74 -- TH-D74 Tri-Band HT\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.");
+		System.out.print("Usage: \n" + "cpt [driver] [port/file] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
+				+ "\t\td74 -- TH-D74 Tri-Band HT\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
+				+ "Ports:\n");
+		
+		SerialPort[] ports=SerialPort.getCommPorts();
+		for(int i=0; i<ports.length; i++) {
+			System.out.format("\t%s\t-- %s\n", ports[i].getSystemPortName(), ports[i].getDescriptivePortName());
+		}
+		
+		System.out.print(
+				"Verbs:\n"+
+				"\tdump           -- Dumps the radio's channels to the console.\n"+
+				"\tinfo           -- Prints the radio's info.\n"+
+				"\tupload foo.csv -- Uploads a CSV file from CHIRP to the radio.\n"
+				);
+		
 	}
 	
 	public static void dump(Radio radio) throws IOException {

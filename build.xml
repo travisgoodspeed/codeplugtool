@@ -1,0 +1,35 @@
+<project name="CodePlugTool">
+
+    <property name="lib.dir"     value="lib"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+      <mkdir dir="build/classes"/>
+      <unzip src="lib/jSerialComm-2.6.2.jar" dest="build/classes/" />
+      <javac srcdir="codeplugtool" destdir="build/classes" classpathref="classpath"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/CodePlugTool.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="com.kk4vcz.codeplug.CommandLineInterface"/>
+            </manifest>
+        </jar>
+    </target>
+
+    
+    <target name="run" depends="jar">
+        <java jar="build/jar/CodePlugTool.jar" fork="true"/>
+    </target>
+    
+    
+
+</project>

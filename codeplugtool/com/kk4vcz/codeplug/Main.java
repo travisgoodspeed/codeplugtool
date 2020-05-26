@@ -2,7 +2,6 @@ package com.kk4vcz.codeplug;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -12,9 +11,9 @@ import com.kk4vcz.codeplug.radios.kenwood.THD74;
 
 /* Hey y'all,
  * 
- * This is a main class that can be run from the command line as a
- * stand alone .jar file.  It is the only class that is allowed to use
- * the jSerialComm driver.
+ * This class contains the main() method for self-testing, as well as some janky static functions
+ * that should probably be moved elsewhere.  The main() method of the .jar file is in
+ * CommandLineInterface.java, not here.
  * 
  * --KK4VCZ
  */
