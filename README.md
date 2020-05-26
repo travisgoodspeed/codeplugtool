@@ -1,7 +1,8 @@
 Howdy y'all,
 
-This is a friendly CAT tool for the Kenwood TH-D74 that I hope to build into a
-portable framework for programming frequencies into radios on many platforms.
+This is a friendly CAT tool for the Kenwood TH-D74 written in Java for
+the command line.  Perhaps someday I'll port it to Android and write
+drivers for other radios.
 
 73 de Knoxville,
 
