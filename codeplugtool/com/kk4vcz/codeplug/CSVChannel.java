@@ -160,5 +160,16 @@ public class CSVChannel implements Channel {
 	}
 	
 	
+	String urcall="CQCQCQ";
+	@Override
+	public String getURCALL() {
+		return urcall;
+	}
+	@Override
+	public void setURCALL(String call) {
+		urcall=call;
+	}
+	
+	
 
 }

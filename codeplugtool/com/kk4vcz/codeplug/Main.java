@@ -42,10 +42,10 @@ public class Main {
 
 		String splitdir = c.getSplitDir();
 		if (splitdir.equals("split")) {
-			freq = String.format("%f MHz (TX %f MHz)", c.getRXFrequency() / 1000000.0,
+			freq = String.format("%f MHz (TX %05.1f MHz)", c.getRXFrequency() / 1000000.0,
 					c.getTXFrequency() / 1000000.0);
 		} else if (splitdir.equals("+") || splitdir.equals("-")) {
-			freq = String.format("%f MHz (TX %s%f MHz)", c.getRXFrequency() / 1000000.0,
+			freq = String.format("%f MHz (TX  %s%02.1f MHz)", c.getRXFrequency() / 1000000.0,
 					splitdir, c.getOffset() / 1000000.0);
 		} else { // Simplex
 			freq = String.format("%f MHz", c.getRXFrequency() / 1000000.0,
@@ -53,9 +53,9 @@ public class Main {
 		}
 		
 		if(c.getToneMode().equals("tone")) {
-			tone=String.format("T%f", c.getToneFreq()/10.0);
+			tone=String.format(" T%05.1f", c.getToneFreq()/10.0);
 		}else if(c.getToneMode().equals("ct")) {
-			tone=String.format("CT%f", c.getToneFreq()/10.0);
+			tone=String.format("CT%05.1f", c.getToneFreq()/10.0);
 		}else if(c.getToneMode().equals("dcs")) {
 			tone=String.format("DTCS%d", c.getDTCSCode());
 		}else if(c.getToneMode().equals("")) {
@@ -64,7 +64,11 @@ public class Main {
 			tone=c.getToneMode();
 		}
 		
-		return String.format("%03d %s %s", c.getIndex(), freq, tone);
+		if(c.getMode().equals("DV") || c.getMode().equals("DR"))
+			tone=c.getURCALL();
+			
+			
+		return String.format("%03d %5s %14s %s", c.getIndex(), c.getMode(), freq, tone);
 	}
 
 	public static void testTHD74() {

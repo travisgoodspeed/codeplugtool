@@ -40,4 +40,9 @@ public interface Channel {
 	//FM, FMN, FMW, AM, USB, LSB, USB-D, LSB-D, DMR, P25, DSTAR, CW, R-CW, etc
 	String getMode();
 	void setMode(String m);
+	
+	
+	//Only valid in DV (DSTAR) mode.
+	String getURCALL();
+	void setURCALL(String call);
 }

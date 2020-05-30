@@ -398,4 +398,16 @@ public class THD74Channel implements Channel {
 		System.out.format("ERROR: %s wasn't set as a DTCSCode.\n", code);
 	}
 
+
+	@Override
+	public String getURCALL() {
+		return p20;
+	}
+
+
+	@Override
+	public void setURCALL(String call) {
+		p20=call;
+	}
+
 }
