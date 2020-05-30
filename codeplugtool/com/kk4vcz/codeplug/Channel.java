@@ -28,6 +28,9 @@ public interface Channel {
 	//boolean getToneSent();
 	//boolean getToneRequired();
 	
+	int getDTCSCode();
+	void setDTCSCode(int code);
+	
 	int getToneFreq();
 	void setToneFreq(int freq);
 	String getToneMode();          //"", "tone", or "ct"

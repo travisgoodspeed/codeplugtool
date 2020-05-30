@@ -26,8 +26,10 @@ public class Main {
 		dst.setOffset(src.getSplitDir(), src.getOffset());
 		dst.setIndex(src.getIndex());
 		dst.setName(src.getName());
+		dst.setToneMode(src.getToneMode());
 		dst.setToneFreq(src.getToneFreq());
 		dst.setToneMode(src.getToneMode());
+		dst.setDTCSCode(src.getDTCSCode());
 	}
 
 	// Utility function to print a channel.
@@ -54,6 +56,12 @@ public class Main {
 			tone=String.format("T%f", c.getToneFreq()/10.0);
 		}else if(c.getToneMode().equals("ct")) {
 			tone=String.format("CT%f", c.getToneFreq()/10.0);
+		}else if(c.getToneMode().equals("dcs")) {
+			tone=String.format("DTCS%d", c.getDTCSCode());
+		}else if(c.getToneMode().equals("")) {
+			tone="";
+		}else {
+			tone=c.getToneMode();
 		}
 		
 		return String.format("%03d %s %s", c.getIndex(), freq, tone);

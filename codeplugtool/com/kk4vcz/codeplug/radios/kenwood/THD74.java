@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 
 import com.kk4vcz.codeplug.CATRadio;
 import com.kk4vcz.codeplug.Channel;
+import com.kk4vcz.codeplug.CommandLineInterface;
 import com.kk4vcz.codeplug.Main;
 
 
@@ -122,5 +123,12 @@ public class THD74 implements CATRadio {
 	public String getSerialNumber() throws IOException {
 		String pair[]=transact("ae").substring(3).split(",");
 		return pair[0];
+	}
+	
+	//Test routine.
+	public static void main(String[] args) {
+		String[] newargs= {"d74", "ttyACM0", "upload", "knoxville.csv"};
+		//String[] newargs= {"d74", "ttyACM0", "dump"};
+		CommandLineInterface.main(newargs);
 	}
 }

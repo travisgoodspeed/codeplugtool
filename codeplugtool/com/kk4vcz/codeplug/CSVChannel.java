@@ -24,16 +24,27 @@ public class CSVChannel implements Channel {
 		setOffset(words[3], (long) (Double.parseDouble(words[4])*1000000.0));
 		
 		//TODO tones
-		setToneFreq((int) (Double.parseDouble(words[6])*10));
+		
 		String tm=words[5];
-		if(tm.equals(""))
+		if(tm.equals("")) {
 			setToneMode("");
-		else if(tm.equals("Tone"))
+		} else if(tm.equals("Tone")) {
 			setToneMode("tone");
-		else
+			setToneFreq((int) (Double.parseDouble(words[6])*10));
+		} else if(tm.equals("TSQL")) {
+			setToneMode("ct");
+			setToneFreq((int) (Double.parseDouble(words[7])*10));
+		} else if(tm.equals("DTCS")) {
+			setToneMode("dcs");
+		} else {
 			System.out.format("ERROR: %s is an unsupported CSV tone mode.\n", tm);
+		}
 		
 		setMode(words[10]);
+		if(words[8].length()>0)
+			setDTCSCode(Integer.parseInt(words[8]));
+		else
+			setDTCSCode(0);
 		//TODO URCALL
 	}
 	public CSVChannel(String line) {
@@ -129,13 +140,23 @@ public class CSVChannel implements Channel {
 	}
 	@Override
 	public void setToneMode(String mode) {
-		if(mode.equals("") || mode.equals("tone") || mode.equals("ct")) {
+		if(mode.equals("") || mode.equals("tone") || mode.equals("ct") || mode.equals("dcs")) {
 			tonemode=mode;
 			return;
 		}
 		
 		System.out.format("ERROR: %s isn't a known tone mode.  Defaulting to none.\n", mode);
 		tonemode="";
+	}
+	
+	int dtcscode=0;
+	@Override
+	public int getDTCSCode() {
+		return dtcscode;
+	}
+	@Override
+	public void setDTCSCode(int code) {
+		dtcscode=code;
 	}
 	
 	
