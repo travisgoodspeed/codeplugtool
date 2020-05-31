@@ -181,8 +181,19 @@ public class THD74Channel implements Channel {
 			p15=2; //Down
 			p3=freq;
 		} else if(dir.equals("split")) {
-			p15=3; //Split, maybe?
-			p3=freq;
+			/* From the protocol, you would expect that the radio is split when p15=3,
+			 * but it seems that wasn't completely implemented in the firmware.  Instead
+			 * of doing a real split, we'll convert it to the appropriate shift.
+			 */
+			if(freq>getRXFrequency()) {
+				p15=1; //Up
+				p3=freq-getRXFrequency();
+			}else if(freq<getRXFrequency()) {
+				p15=2; //Down
+				p3=getRXFrequency()-freq;
+			}else {
+				p15=0;//simplex
+			}
 		} else {
 			p15=0; //simplex
 		}

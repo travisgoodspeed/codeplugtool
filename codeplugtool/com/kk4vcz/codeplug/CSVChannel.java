@@ -101,7 +101,10 @@ public class CSVChannel implements Channel {
 	}
 	@Override
 	public void setMode(String m) {
-		mode=m;
+		if(m.equals("Auto"))
+			mode="FM";
+		else
+			mode=m;
 	}
 	@Override
 	public void setRXFrequency(long freq) {

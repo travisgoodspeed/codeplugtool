@@ -26,6 +26,7 @@ public class Main {
 		dst.setOffset(src.getSplitDir(), src.getOffset());
 		dst.setIndex(src.getIndex());
 		dst.setName(src.getName());
+		dst.setMode(src.getMode());
 		dst.setToneMode(src.getToneMode());
 		dst.setToneFreq(src.getToneFreq());
 		dst.setToneMode(src.getToneMode());
@@ -65,7 +66,7 @@ public class Main {
 		}
 		
 		if(c.getMode().equals("DV") || c.getMode().equals("DR"))
-			tone=c.getURCALL();
+			tone=String.format("%7s", c.getURCALL());
 			
 			
 		return String.format("%03d %5s %14s %s", c.getIndex(), c.getMode(), freq, tone);
