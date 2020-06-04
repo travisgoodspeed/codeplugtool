@@ -38,7 +38,7 @@ public class THD74Channel implements Channel {
 	 * p11 -- DCS status.
 	 * p12 -- CTCSS/DCS status.
 	 * p13 -- Reverse
-	 * p14 -- Mystery parameter goes somewhere near here.
+	 * p14 -- Mystery bit, seems to enable split mode. 
 	 * p15 -- Shift direction.
 	 * p16 -- Tone frequency.
 	 * p17 -- CTCSS frequency.
@@ -126,6 +126,10 @@ public class THD74Channel implements Channel {
 		p22=Integer.parseInt(words[22]);
 		p23=Integer.parseInt(words[23]);
 		
+		
+		if(p14!=0) {
+			System.out.format("p14=%d\n%s", p14, row);
+		}
 		
 		//Regenerate the string tomake sure we parsed it right.
 		if(!render().contentEquals(row)) {

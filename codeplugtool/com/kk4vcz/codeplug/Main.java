@@ -58,7 +58,7 @@ public class Main {
 		}else if(c.getToneMode().equals("ct")) {
 			tone=String.format("CT%05.1f", c.getToneFreq()/10.0);
 		}else if(c.getToneMode().equals("dcs")) {
-			tone=String.format("DTCS%d", c.getDTCSCode());
+			tone=String.format("DTCS%04d", c.getDTCSCode());
 		}else if(c.getToneMode().equals("")) {
 			tone="";
 		}else {

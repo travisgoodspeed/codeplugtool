@@ -31,8 +31,9 @@ public class THD74 implements CATRadio {
 		writer=new PrintWriter(os);
 	}
 	
+	@Override
 	//Sends a command and returns the response.
-	private String transact(String cmd) throws IOException{
+	public String rawCommand(String cmd) throws IOException{
 		/*
 		 * In the TH-D74, we write the cat command and then immediately read back
 		 * the result.
@@ -51,7 +52,7 @@ public class THD74 implements CATRadio {
 		System.out.println(Main.RenderChannel(channel));
 		channel.setIndex(index);
 		String cmd=channel.render();
-		String res=transact(cmd);
+		String res=rawCommand(cmd);
 		if(!cmd.equals(res)) {
 			System.out.println("Command disagrees with response:\n"+cmd+"\n"+res);
 			System.exit(1);
@@ -61,7 +62,7 @@ public class THD74 implements CATRadio {
 
 	@Override
 	public Channel readChannel(int index) throws IOException {
-		String row=transact(String.format("me %03d", index));
+		String row=rawCommand(String.format("me %03d", index));
 		
 		//Unused channel number.
 		if(row.equals("N"))
@@ -74,8 +75,8 @@ public class THD74 implements CATRadio {
 
 	@Override
 	public String getID() throws IOException {
-		String base=transact("id").substring(3);
-		String sub=transact("ty").substring(3);
+		String base=rawCommand("id").substring(3);
+		String sub=rawCommand("ty").substring(3);
 		
 		return base+","+sub;
 	}
@@ -88,18 +89,18 @@ public class THD74 implements CATRadio {
 
 	@Override
 	public long getFrequency() throws IOException {
-		String freq=transact("FQ 0");
+		String freq=rawCommand("FQ 0");
 		return Integer.valueOf(freq.substring(5)).longValue();
 	}
 
 	@Override
 	public String getCallsign() throws IOException {
-		return transact("CS").substring(3);
+		return rawCommand("CS").substring(3);
 	}
 
 	@Override
 	public void setCallsign(String callsign) throws IOException {
-		transact("CS "+callsign);
+		rawCommand("CS "+callsign);
 	}
 
 	@Override
@@ -110,18 +111,18 @@ public class THD74 implements CATRadio {
 
 	@Override
 	public long getFrequencyB() throws IOException {
-		String freq=transact("FQ 1");
+		String freq=rawCommand("FQ 1");
 		return Integer.valueOf(freq.substring(5)).longValue();
 	}
 
 	@Override
 	public String getVersion() throws IOException {
-		return transact("fv").substring(3);
+		return rawCommand("fv").substring(3);
 	}
 
 	@Override
 	public String getSerialNumber() throws IOException {
-		String pair[]=transact("ae").substring(3).split(",");
+		String pair[]=rawCommand("ae").substring(3).split(",");
 		return pair[0];
 	}
 	
@@ -131,4 +132,5 @@ public class THD74 implements CATRadio {
 		//String[] newargs= {"d74", "ttyACM0", "dump"};
 		CommandLineInterface.main(newargs);
 	}
+
 }

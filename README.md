@@ -1,8 +1,8 @@
 Howdy y'all,
 
 This is a friendly CAT tool for the Kenwood TH-D74 written in Java for
-the command line.  Perhaps someday I'll port it to Android and write
-drivers for other radios.
+the command line, with the aim of eventually supporting many radios
+and running over Bluetooth from an Android phone.
 
 73 de Knoxville,
 
@@ -15,12 +15,12 @@ The [jSerialComm](https://github.com/Fazecast/jSerialComm) library is
 used to provide a serial port connection for the CLI tool.  It is
 embedded in the repo and statically linked into `CodePlugTool.jar`.
 
-On Android, we'll instead by using the built-in Bluetooth RFCOMM
+On Android, we'll instead be using the built-in Bluetooth RFCOMM
 libraries.
 
 ## Building
 
-Development is performed in Eclipse, but it's easier to build from the
+Development is performed in Eclipse, but it's easy to build from the
 command line with Apache Ant.
 
 ```
@@ -36,14 +36,13 @@ compile:
     [javac] Compiling 9 source files to build/classes
 
 jar:
-    [mkdir] Created dir: build/jar
-      [jar] Building jar: build/jar/CodePlugTool.jar
+      [jar] Building jar: CodePlugTool.jar
 
 BUILD SUCCESSFUL
 Total time: 1 second
 ```
 
-## Usage
+## CLI Usage
 
 The CLI is unstable at this point, but generally you provide a driver
 (`d74`) and a port name (`ttyACM0`) as your parameters, then a verb or
@@ -102,7 +101,7 @@ dell% java -jar CodePlugTool.jar d74 ttyACM0 dump
 ...
 ```
 
-Flashing a CSV file from Chirp,
+Flashing a CSV file from Chirp to a Kenwood TH-D74,
 
 ```
 dell% head knoxville.csv 
@@ -132,6 +131,12 @@ dell% java -jar CodePlugTool.jar d74 ttyACM0 upload knoxville.csv
 110 147.240000 MHz (TX +0.600000 MHz) T151.400000
 ...
 ```
+
+## Developer Usage
+
+See `CommandLineInterface` for quick examples of communicating
+with a radio.  Better examples are on the way.
+
 
 ## License
 

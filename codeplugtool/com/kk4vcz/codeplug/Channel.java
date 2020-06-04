@@ -22,12 +22,6 @@ public interface Channel {
 	long getOffset();
 	void setOffset(String dir, long freq);
 	
-	//Tenths of a Hz.
-	//int getTXToneFreq();
-	//int getRXToneFreq();
-	//boolean getToneSent();
-	//boolean getToneRequired();
-	
 	int getDTCSCode();
 	void setDTCSCode(int code);
 	

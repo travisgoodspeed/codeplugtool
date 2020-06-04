@@ -19,4 +19,6 @@ public interface CATRadio extends Radio {
 	
 	String getCallsign() throws IOException;
 	void setCallsign(String callsign) throws IOException;
+	
+	String rawCommand(String cmd) throws IOException;
 }

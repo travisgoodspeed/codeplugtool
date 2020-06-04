@@ -30,7 +30,8 @@ public class CommandLineInterface {
 				"Verbs:\n"+
 				"\tdump           -- Dumps the radio's channels to the console.\n"+
 				"\tinfo           -- Prints the radio's info.\n"+
-				"\tupload foo.csv -- Uploads a CSV file from CHIRP to the radio.\n"
+				"\tupload foo.csv -- Uploads a CSV file from CHIRP to the radio.\n"+
+				"\traw \'ME 000\' -- Runs a raw command and prints the result.\n"
 				);
 		
 	}
@@ -105,6 +106,8 @@ public class CommandLineInterface {
 					info(radio);
 				}else if(args[i].equals("upload")) {
 					upload(radio, args[++i]);
+				}else if(args[i].equals("raw")) {
+					System.out.println(radio.rawCommand(args[++i]));
 				}
 			}
 
