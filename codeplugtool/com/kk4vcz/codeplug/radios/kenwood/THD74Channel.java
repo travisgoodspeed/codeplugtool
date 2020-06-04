@@ -127,9 +127,11 @@ public class THD74Channel implements Channel {
 		p23=Integer.parseInt(words[23]);
 		
 		
+		/* If p14=1,p15=3 we're in split mode.
 		if(p14!=0) {
-			System.out.format("p14=%d\n%s", p14, row);
+			System.out.format("p14=%d\n%s\n", p14, row);
 		}
+		*/
 		
 		//Regenerate the string tomake sure we parsed it right.
 		if(!render().contentEquals(row)) {
@@ -157,6 +159,9 @@ public class THD74Channel implements Channel {
 	
 	@Override
 	public String getSplitDir() {
+		if(p14==1)
+			return "split";
+		
 		switch(p15) {
 		case 0: //simplex
 			return "";
@@ -185,10 +190,11 @@ public class THD74Channel implements Channel {
 			p15=2; //Down
 			p3=freq;
 		} else if(dir.equals("split")) {
-			/* From the protocol, you would expect that the radio is split when p15=3,
-			 * but it seems that wasn't completely implemented in the firmware.  Instead
-			 * of doing a real split, we'll convert it to the appropriate shift.
-			 */
+			/* From the initial description of the protocol,
+			 * it seems that there is no split and that we need
+			 * to fake it with other methods.  This is the code
+			 * for faking it.
+			
 			if(freq>getRXFrequency()) {
 				p15=1; //Up
 				p3=freq-getRXFrequency();
@@ -198,6 +204,14 @@ public class THD74Channel implements Channel {
 			}else {
 				p15=0;//simplex
 			}
+			*/
+			
+			
+			/* This seems to work well on my American TH-D74,
+			 * but uses a field missing from the public protocol docs. */
+			p14=1; //Split mode.
+			p15=3;
+			p3=freq;
 		} else {
 			p15=0; //simplex
 		}
