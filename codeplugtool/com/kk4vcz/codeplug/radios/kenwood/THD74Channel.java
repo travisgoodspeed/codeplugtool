@@ -38,7 +38,7 @@ public class THD74Channel implements Channel {
 	 * p11 -- DCS status.
 	 * p12 -- CTCSS/DCS status.
 	 * p13 -- Reverse
-	 * p14 -- Mystery bit, seems to enable split mode. 
+	 * p14 -- Mystery bit, seems to enable split mode.
 	 * p15 -- Shift direction.
 	 * p16 -- Tone frequency.
 	 * p17 -- CTCSS frequency.
@@ -177,7 +177,7 @@ public class THD74Channel implements Channel {
 	
 	@Override
 	public void setRXFrequency(long freq) {
-		p2=freq;
+		p2=freq; 
 	}
 
 

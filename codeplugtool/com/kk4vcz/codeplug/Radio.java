@@ -13,4 +13,7 @@ public interface Radio {
 	
 	public String getVersion() throws IOException;
 	public String getSerialNumber() throws IOException;
+	
+	public int getChannelMin() throws IOException;
+	public int getChannelMax() throws IOException;
 }

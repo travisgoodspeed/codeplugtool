@@ -69,7 +69,7 @@ public class Main {
 			tone=String.format("%7s", c.getURCALL());
 			
 			
-		return String.format("%03d %5s %14s %s", c.getIndex(), c.getMode(), freq, tone);
+		return String.format("%03d %5s %14s %s %s", c.getIndex(), c.getMode(), freq, tone, c.getName());
 	}
 
 	public static void testTHD74() {

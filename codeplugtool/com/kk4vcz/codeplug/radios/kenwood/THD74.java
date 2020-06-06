@@ -133,4 +133,14 @@ public class THD74 implements CATRadio {
 		CommandLineInterface.main(newargs);
 	}
 
+	@Override
+	public int getChannelMin() throws IOException {
+		return 0;
+	}
+
+	@Override
+	public int getChannelMax() throws IOException {
+		return 999;
+	}
+
 }

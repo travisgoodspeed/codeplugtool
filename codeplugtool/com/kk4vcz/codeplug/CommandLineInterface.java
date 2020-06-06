@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.kk4vcz.codeplug.radios.kenwood.THD74;
+import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 
 /*
  * This is a rough CLI wrapper for the tool, intended to be used from Unix
@@ -18,7 +19,7 @@ import com.kk4vcz.codeplug.radios.kenwood.THD74;
 public class CommandLineInterface {
 	public static void usage() {
 		System.out.print("Usage: \n" + "cpt [driver] [port/file] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
-				+ "\t\td74 -- TH-D74 Tri-Band HT\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
+				+ "\t\td74 -- TH-D74 Tri-Band HT\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
 				+ "Ports:\n");
 		
 		SerialPort[] ports=SerialPort.getCommPorts();
@@ -37,7 +38,7 @@ public class CommandLineInterface {
 	}
 	
 	public static void dump(Radio radio) throws IOException {
-		for (int i = 0; i < 1000; i++) {
+		for (int i = radio.getChannelMin(); i <= radio.getChannelMax(); i++) {
 			Channel c = radio.readChannel(i);
 			if (c != null)
 				System.out.println(Main.RenderChannel(c));
@@ -68,7 +69,8 @@ public class CommandLineInterface {
 		System.out.println("Version:     " + radio.getVersion());
 		System.out.println("Serial:      " + radio.getSerialNumber());
 		System.out.println("Callsign:    " + radio.getCallsign());
-		System.out.println("Frequency:   " + radio.getFrequency());
+		System.out.println("Frequency A: " + radio.getFrequency());
+		System.out.println("Frequency B: " + radio.getFrequencyB());
 	}
 
 	public static void main(String[] args) {
@@ -94,7 +96,18 @@ public class CommandLineInterface {
 				// 1ms response time.
 				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
 				radio = new THD74(port.getInputStream(), port.getOutputStream());
-			}else {
+			} else if (driver.equals("991a")) {
+				port = SerialPort.getCommPort(args[1]);
+				if(!port.openPort()) {
+					System.out.println("Failed to open "+args[1]);
+					System.exit(1);
+				}
+				
+				port.setBaudRate(38400);
+				// 1ms response time.
+				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0); //TODO fix this timeout by sampling individual bytes.
+				radio = new FT991A(port.getInputStream(), port.getOutputStream());
+			} else {
 				System.out.println("Unknown driver "+args[0]);
 				System.exit(1);
 			}
