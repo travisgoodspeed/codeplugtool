@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.kk4vcz.codeplug.radios.kenwood.THD74;
+import com.kk4vcz.codeplug.radios.kenwood.TMD710G;
 import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 
 /*
@@ -103,6 +104,17 @@ public class CommandLineInterface {
 				// 1ms response time.
 				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
 				radio = new THD74(port.getInputStream(), port.getOutputStream());
+			} else if (driver.equals("d710")) {
+				port = SerialPort.getCommPort(args[1]);
+				if(!port.openPort()) {
+					System.out.println("Failed to open "+args[1]);
+					System.exit(1);
+				}
+				
+				port.setBaudRate(57600);
+				// 1ms response time.
+				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
+				radio = new TMD710G(port.getInputStream(), port.getOutputStream());
 			} else if (driver.equals("991a")) {
 				port = SerialPort.getCommPort(args[1]);
 				if(!port.openPort()) {
