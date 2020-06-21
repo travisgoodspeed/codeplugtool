@@ -16,4 +16,6 @@ public interface Radio {
 	
 	public int getChannelMin() throws IOException;
 	public int getChannelMax() throws IOException;
+	
+	public long peek32(long adr) throws IOException;
 }

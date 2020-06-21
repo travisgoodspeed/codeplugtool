@@ -72,6 +72,13 @@ public class CommandLineInterface {
 		System.out.println("Frequency A: " + radio.getFrequency());
 		System.out.println("Frequency B: " + radio.getFrequencyB());
 	}
+	
+	public static void dumpmem(CATRadio radio) throws IOException {
+		/* This doesn't work yet, just messing around to see what gets a reply. */
+		for(int i=0; i<1024; i++) {
+			radio.peek32(i);
+		}
+	}
 
 	public static void main(String[] args) {
 		if (args.length < 3) {
@@ -115,6 +122,8 @@ public class CommandLineInterface {
 			for (int i = 2; i < args.length; i++) {
 				if(args[i].equals("dump")) {
 					dump(radio);
+				}else if(args[i].equals("dumpmem")) {
+					dumpmem(radio);
 				}else if(args[i].equals("info")) {
 					info(radio);
 				}else if(args[i].equals("upload")) {

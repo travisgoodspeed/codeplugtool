@@ -143,4 +143,10 @@ public class THD74 implements CATRadio {
 		return 999;
 	}
 
+	@Override
+	public long peek32(long adr) throws IOException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

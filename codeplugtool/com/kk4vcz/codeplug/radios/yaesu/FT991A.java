@@ -79,6 +79,8 @@ public class FT991A implements CATRadio {
 		String id=rawCommand("ID").substring(2,6);
 		if(id.equals("0670"))
 			return "Yaesu FT-991A";
+		if(id.equals("0570"))
+			return "Yaesu FT-991 ";
 		
 		return String.format("Unknown ID %s", id);
 	}
@@ -140,6 +142,23 @@ public class FT991A implements CATRadio {
 	@Override
 	public int getChannelMax() throws IOException {
 		return 127;
+	}
+
+
+	@Override
+	public long peek32(long adr) throws IOException {
+		char c0=0x2f, c1=0xe8, c2=0x0c;
+		//c0^=adr;
+		//c1^=adr;
+		c2^=adr;
+		
+		String res=rawCommand(String.format("SPR%c%c%c", c0,c1,c2)).strip();
+		if(res.charAt(0)!='?') {
+			System.out.format("Got a reply to SPR %2x %2x %2x: %s\n",
+					(int) c0, (int) c1, (int) c2,
+					res);
+		}
+		return 0;
 	}
 
 }
