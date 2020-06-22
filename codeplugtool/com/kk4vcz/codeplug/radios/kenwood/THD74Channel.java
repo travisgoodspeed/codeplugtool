@@ -102,6 +102,8 @@ public class THD74Channel implements Channel {
 			throw new IOException(String.format("ERROR: %d words, not the 23 expected\n", words.length));
 		}
 		
+		//All of the parameters are in a row, and we keep their meaning natively
+		//to avoid complicated conversions.
 		p1=Integer.parseInt(words[1]);
 		p2=Integer.parseInt(words[2]);
 		p3=Integer.parseInt(words[3]);
@@ -133,7 +135,7 @@ public class THD74Channel implements Channel {
 		}
 		*/
 		
-		//Regenerate the string tomake sure we parsed it right.
+		//Regenerate the string to make sure we parsed it right.
 		if(!render().contentEquals(row)) {
 			System.out.println("# WARNING: Rendered string disagrees with source!");
 			System.out.format("# %s\n", row);
@@ -437,5 +439,7 @@ public class THD74Channel implements Channel {
 	public void setURCALL(String call) {
 		p20=call;
 	}
+	
+	
 
 }

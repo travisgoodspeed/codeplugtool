@@ -149,4 +149,9 @@ public class THD74 implements CATRadio {
 		return 0;
 	}
 
+	
+	@Override
+	public void deleteChannel(int index) throws IOException {
+		rawCommand(String.format("ME %03d,", index));
+	}
 }

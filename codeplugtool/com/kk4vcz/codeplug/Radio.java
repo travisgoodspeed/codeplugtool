@@ -10,6 +10,7 @@ import java.io.IOException;
 public interface Radio {
 	public void writeChannel(int index, Channel ch) throws IOException;
 	public Channel readChannel(int index) throws IOException;
+	public void deleteChannel(int index) throws IOException;
 	
 	public String getVersion() throws IOException;
 	public String getSerialNumber() throws IOException;

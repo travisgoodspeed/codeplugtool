@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import com.kk4vcz.codeplug.CATRadio;
 import com.kk4vcz.codeplug.Channel;
 import com.kk4vcz.codeplug.CommandLineInterface;
-import com.kk4vcz.codeplug.radios.kenwood.THD74Channel;
 
 /*
  * The Yaesu FT-991A's protocol is publicly documented in the "CAT Operations
@@ -147,6 +146,8 @@ public class FT991A implements CATRadio {
 
 	@Override
 	public long peek32(long adr) throws IOException {
+		/* TODO This doesn't work yet. */
+		
 		char c0=0x2f, c1=0xe8, c2=0x0c;
 		//c0^=adr;
 		//c1^=adr;
@@ -159,6 +160,13 @@ public class FT991A implements CATRadio {
 					res);
 		}
 		return 0;
+	}
+
+
+	@Override
+	public void deleteChannel(int index) throws IOException {
+		// TODO How are channels erased?
+		System.out.println("ERROR: I don't know how to erase FT991A channels.");
 	}
 
 }

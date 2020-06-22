@@ -150,4 +150,9 @@ public class TMD710G implements CATRadio {
 		return reader.readLine().strip();
 	}
 
+	@Override
+	public void deleteChannel(int index) throws IOException {
+		rawCommand(String.format("ME %03d,", index));
+	}
+
 }

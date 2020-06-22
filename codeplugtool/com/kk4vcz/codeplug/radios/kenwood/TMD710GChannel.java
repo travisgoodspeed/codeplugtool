@@ -3,7 +3,6 @@ package com.kk4vcz.codeplug.radios.kenwood;
 import java.io.IOException;
 
 import com.kk4vcz.codeplug.Channel;
-import com.kk4vcz.codeplug.CommandLineInterface;
 import com.kk4vcz.codeplug.Main;
 
 public class TMD710GChannel implements Channel {
@@ -56,12 +55,21 @@ public class TMD710GChannel implements Channel {
 		
 		TMD710GChannel ch=new TMD710GChannel(me, mn);
 		System.out.println(Main.RenderChannel(ch));
+		
+		System.out.println(me);
+		System.out.println(ch.renderme());
+		System.out.println(mn);
+		System.out.println(ch.rendermn());
+		
 	}
 	
 	
 	public TMD710GChannel(String me, String mn) {
 		//First we parse the ME line.
 		String[] words=("wasted,"+me.substring(3)).split(",");
+		
+		//All of the parameters are in a row, and we keep their meaning natively
+		//to avoid complicated conversions.
 		p1=Integer.parseInt(words[1]);
 		p2=Integer.parseInt(words[2]);
 		p3=Integer.parseInt(words[3]);
@@ -79,7 +87,23 @@ public class TMD710GChannel implements Channel {
 		p15=Integer.parseInt(words[15]);
 		p16=Integer.parseInt(words[16]);
 		
+		//Then we parse the name.
 		name=mn.substring(7);
+		
+		
+		//Regenerate the string to make sure we parsed it right.
+		if(!renderme().contentEquals(me)) {
+			System.out.println("# WARNING: Rendered string disagrees with source!");
+			System.out.format("# %s\n", me);
+			System.out.format("# %s\n", renderme());
+		}
+		
+		//Regenerate the string to make sure we parsed it right.
+		if(!rendermn().contentEquals(mn)) {
+			System.out.println("# WARNING: Rendered string disagrees with source!");
+			System.out.format("# %s\n", mn);
+			System.out.format("# %s\n", rendermn());
+		}
 	}
 	
 	public TMD710GChannel(Channel src) throws IOException {
@@ -87,10 +111,13 @@ public class TMD710GChannel implements Channel {
 	}
 	
 	public String renderme() {
-		return "";
+		return String.format("ME %03d,%010d,%d,%d,%d,%d,%d,%d,%02d,%02d,%03d,%08d,%d,%010d,%d,%d", 
+				p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16
+				);
 	}
 	public String rendermn() {
-		return "";
+		//TODO Check the name length, newlines?
+		return String.format("MN %03d,%s", p1, name);
 	}
 	
 
