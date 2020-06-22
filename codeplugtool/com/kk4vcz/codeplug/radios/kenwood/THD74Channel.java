@@ -268,7 +268,6 @@ public class THD74Channel implements Channel {
 	 * but p17 contains the tone in CT mode.  Return zero when no tone is enabled.
 	 */
 	
-	
 	public int getTXToneFreq() {
 		if(p9==1 && p10==0) // T mode, just transmitting the tone.
 			return tones[p16];

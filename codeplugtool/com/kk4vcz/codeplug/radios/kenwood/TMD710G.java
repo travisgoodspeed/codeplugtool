@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import com.kk4vcz.codeplug.CATRadio;
 import com.kk4vcz.codeplug.Channel;
 import com.kk4vcz.codeplug.CommandLineInterface;
+import com.kk4vcz.codeplug.Main;
 
 /*
  * This driver ought to also work for the TM-V71.
@@ -24,7 +25,8 @@ public class TMD710G implements CATRadio {
 	
 	//Test routine.
 	public static void main(String[] args) {
-		String[] newargs= {"d710", "ttyS1", "info"};
+		//String[] newargs= {"d710", "ttyS1", "info"};
+		String[] newargs= {"d710", "ttyS1", "dump"};
 		CommandLineInterface.main(newargs);
 	}
 
@@ -36,15 +38,34 @@ public class TMD710G implements CATRadio {
 	@Override
 	public void writeChannel(int index, Channel ch) throws IOException {
 		// TODO Auto-generated method stub
-
+		TMD710GChannel channel=new TMD710GChannel(ch);
+		System.out.println(Main.RenderChannel(channel));
+		channel.setIndex(index);
+		String cmdme=channel.renderme();
+		String res=rawCommand(cmdme);
+		if(!cmdme.equals(res)) {
+			System.out.println("Command disagrees with response:\n"+cmdme+"\n"+res);
+			System.exit(1);
+		}
+		
+		//TODO Memory Name
 	}
+	
 
 	@Override
 	public Channel readChannel(int index) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		String rowme=rawCommand(String.format("me %03d", index));
+		
+		//Unused channel number.
+		if(rowme.equals("N"))
+			return null;
+		
+		String rowmn=rawCommand(String.format("mn %03d", index));
+		
+		TMD710GChannel ch=new TMD710GChannel(rowme, rowmn);
+		
+		return ch;
 	}
-
 	@Override
 	public String getVersion() throws IOException {
 		//Grabbing just the main unit's version number.  Can differ from head unit.
