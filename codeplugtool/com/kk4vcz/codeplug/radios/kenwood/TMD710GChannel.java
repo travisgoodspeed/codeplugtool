@@ -89,7 +89,6 @@ public class TMD710GChannel implements Channel {
 		//Then we parse the name.
 		name=mn.substring(7);
 		
-		
 		//Regenerate the string to make sure we parsed it right.
 		if(!renderme().contentEquals(me)) {
 			System.out.println("# WARNING: Rendered string disagrees with source!");
@@ -138,6 +137,8 @@ public class TMD710GChannel implements Channel {
 	@Override
 	public void setName(String n) {
 		name=n;
+		if(name.length()>8)
+			name=n.substring(0,8);
 	}
 	
 	private long roundfreq(long f) {
@@ -216,7 +217,7 @@ public class TMD710GChannel implements Channel {
 		} else if(dir.equals("split")) {
 			p4=0; //Would be simplex, except the offset is set.
 			//TODO Verify that the transmit frequency fits a legal step size.
-			p14=freq;
+			p14=roundfreq(freq);
 			p12=0;
 		} else {
 			p4=0; //simplex
@@ -224,7 +225,7 @@ public class TMD710GChannel implements Channel {
 		}
 	}
 	
-	//This is the listing of integer codes indexed by their value within the radio.
+	//This is the listing of integer codes indexed by their value within the radio.  It matches the TH-D74.
 	static int codemap[]= {
 		23, 25, 26, 31, 32, 36, 43, 47, 51, 53, 54, 65, 71, 72, 73, 74, 114, 115, 116, 122,
 		125, 131, 132, 134, 143, 145, 152, 155, 156, 162, 165, 172, 174, 205, 212, 223, 225,
@@ -250,24 +251,33 @@ public class TMD710GChannel implements Channel {
 	}
 	
 	static int tones[]= {
+			/* The tone list is a subset of the TH-D74, whose extra entries
+			 * have been commented below.
+			 */
+			
 			670, 693, 719, 744,
 			770, 797, 825, 854,
 			885, 915, 948, 974,
 			1000, 1035, 1072, 1109,
 			1148, 1188, 1230, 1273,
 			1318, 1365, 1413, 1462,
-			1514, 1567, 1598, 1622,
-			1655, 1679, 1713, 1738,
-			1773, 1799, 1835, 1862,
-			1899,  1928, 1966, 1995,
+			1514, 1567, /* 1598,*/ 1622,
+			/*1655,*/ 1679, /*1713,*/ 1738,
+			/*1773,*/ 1799, /*1835,*/ 1862,
+			/*1899,*/  1928, /*1966, 1995,*/
 			2035,  2065, 2107, 2181,
 			2257,  2291, 2336, 2418,
-			2503,  2541			
+			2503,  2541	
 	};
 
 	@Override
 	public int getToneFreq() {
-		return tones[p9];
+		if(p6==1)
+			return tones[p9];
+		if(p7==1)
+			return tones[p10];
+		
+		return 0;
 	}
 
 	@Override
@@ -275,6 +285,7 @@ public class TMD710GChannel implements Channel {
 		for(int i=0; i<tones.length; i++) {
 			if(tones[i]==freq) {
 				p9=i;
+				p10=i;
 				return;
 			}
 		}

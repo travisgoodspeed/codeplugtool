@@ -42,6 +42,15 @@ public class TMD710G implements CATRadio {
 		System.out.println(Main.RenderChannel(channel));
 		channel.setIndex(index);
 		
+		/* As bad luck would have it, we cannot write memory entries for the 800-1200 MHz
+		 * bands using the standard ME command.  I don't know why, but perhaps the VFO
+		 * could be used as a workaround?
+		 */
+		if(ch.getRXFrequency()>500000000) {
+			System.out.format("Cowardly refusing to write %f MHz to memory %03d.\n", (float) ch.getRXFrequency(), index);
+			return;
+		}
+		
 		/*
 		 * Unlike the D74, the D710 does not echo the channel back,
 		 * so we'll read it manually to compare the values.
@@ -58,8 +67,8 @@ public class TMD710G implements CATRadio {
 		String cmdmn=channel.rendermn();
 		rawCommand(cmdmn);
 		res=rawCommand(String.format("MN %03d", index));
-		if(!cmdmn.equals(res)) {
-			System.out.println("Command disagrees with response:\n"+cmdme+"\n"+res);
+		if(!cmdmn.strip().equals(res.strip())) {
+			System.out.println("Command disagrees with response:\n"+cmdmn+"\n"+res);
 			System.exit(1);
 		}
 	}
