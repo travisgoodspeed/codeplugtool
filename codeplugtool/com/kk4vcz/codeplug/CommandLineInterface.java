@@ -20,7 +20,7 @@ import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 public class CommandLineInterface {
 	public static void usage() {
 		System.out.print("Usage: \n" + "cpt [driver] [port/file] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
-				+ "\t\td74 -- TH-D74 Tri-Band HT\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
+				+ "\t\td74 -- TH-D74 Tri-Band HT\n"+ "\t\td710 -- TM-D710 Mobile\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
 				+ "Ports:\n");
 		
 		SerialPort[] ports=SerialPort.getCommPorts();
@@ -30,10 +30,11 @@ public class CommandLineInterface {
 		
 		System.out.print(
 				"Verbs:\n"+
-				"\tdump           -- Dumps the radio's channels to the console.\n"+
-				"\tinfo           -- Prints the radio's info.\n"+
-				"\tupload foo.csv -- Uploads a CSV file from CHIRP to the radio.\n"+
-				"\traw \'ME 000\' -- Runs a raw command and prints the result.\n"
+				"\tinfo             -- Prints the radio's info.\n"+
+				"\tdump             -- Dumps the radio's channels to the console.\n"+
+				"\tupload foo.csv   -- Uploads a CSV file from CHIRP to the radio.\n"+
+				"\tdownload foo.csv -- Downloads a CSV file from the radio.\n"+
+				"\traw \'ME 000\'   -- Runs a raw command and prints the result.\n"
 				);
 		
 	}
@@ -63,6 +64,13 @@ public class CommandLineInterface {
 		reader.close();
 
 		System.out.println("done");
+	}
+	
+	public static void erase(Radio radio) throws IOException{
+		for(int i=radio.getChannelMin(); i<radio.getChannelMax(); i++) {
+			System.out.format("Erasing channel %d.\n", i);
+			radio.deleteChannel(i);
+		}
 	}
 	
 	public static void info(CATRadio radio) throws IOException {
@@ -140,6 +148,11 @@ public class CommandLineInterface {
 					info(radio);
 				}else if(args[i].equals("upload")) {
 					upload(radio, args[++i]);
+				}else if(args[i].equals("download")) {
+					//download(radio, args[++i]);
+					System.out.println("Downloading to CSV isn't implemented yet.");
+				}else if(args[i].equals("erase")) {
+					erase(radio);
 				}else if(args[i].equals("raw")) {
 					System.out.println(radio.rawCommand(args[++i]));
 				}

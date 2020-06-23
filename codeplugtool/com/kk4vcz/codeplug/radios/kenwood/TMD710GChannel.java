@@ -30,20 +30,20 @@ public class TMD710GChannel implements Channel {
 	
 	int p1=0; //Memory channel number.
 	long p2=146520000; //RX Frequency
-	int p3; //rx step size.
-	int p4; //shift direction
-	int p5; //reverse
-	int p6; //tone status
-	int p7; //ctcss status
-	int p8; //dcs status
-	int p9; //tone frequency
-	int p10; //CTCSS frequency
-	int p11; //DCS frequency
-	long p12; //offset frequency in Hz, 8 digits
-	int p13; //mode
-	long p14; //TX freq in Hz, 10 digits
-	int p15; //TX step size;
-	int p16; //lock out
+	int p3=0; //rx step size.
+	int p4=0; //shift direction
+	int p5=0; //reverse
+	int p6=0; //tone status
+	int p7=0; //ctcss status
+	int p8=0; //dcs status
+	int p9=8; //tone frequency
+	int p10=8; //CTCSS frequency
+	int p11=47; //DCS frequency
+	long p12=600000; //offset frequency in Hz, 8 digits
+	int p13=0; //mode
+	long p14=0; //TX freq in Hz, 10 digits
+	int p15=0; //TX step size;
+	int p16=0; //lock out
 	
 	String name="";
 	
@@ -60,7 +60,6 @@ public class TMD710GChannel implements Channel {
 		System.out.println(ch.renderme());
 		System.out.println(mn);
 		System.out.println(ch.rendermn());
-		
 	}
 	
 	
@@ -140,10 +139,16 @@ public class TMD710GChannel implements Channel {
 	public void setName(String n) {
 		name=n;
 	}
-
+	
+	private long roundfreq(long f) {
+		long freq=(long) f/5000;
+		return freq*5000;
+	}
+	
 	@Override
 	public void setRXFrequency(long freq) {
-		p2=freq;
+		//TODO Round the frequency when it violates the step size. 
+		p2=roundfreq(freq);
 	}
 
 	@Override
@@ -154,8 +159,13 @@ public class TMD710GChannel implements Channel {
 	@Override
 	public long getTXFrequency() {
 		/* This function always returns a normalized frequency,
-		 * so we calculate the shift from P15 and return the result.
+		 * so we calculate the shift from P12 and return the result.
+		 * 
+		 * Split mode is a special case where p14 is non-zero.
 		 */
+		
+		if(p14!=0)
+			return p14;
 		
 		switch(p4) {
 		case 0: //simplex
@@ -164,8 +174,6 @@ public class TMD710GChannel implements Channel {
 			return getRXFrequency()+p12;
 		case 2: //Down
 			return getRXFrequency()-p12;
-		case 3: //Split
-			return p12; //TODO Is this right?
 		}
 
 		System.out.format("Unexpected shift %d, expected less than 4.  Assuming simplex.\n", p15);
@@ -174,7 +182,8 @@ public class TMD710GChannel implements Channel {
 
 	@Override
 	public String getSplitDir() {
-		//TODO Split mode accurate?
+		if(p14!=0)
+			return "split";
 
 		switch(p4) {
 		case 0: //simplex
@@ -183,8 +192,6 @@ public class TMD710GChannel implements Channel {
 			return "+";
 		case 2: //Down
 			return "-";
-		case 3: //Split
-			return "split";
 		}
 		return "error";
 	}
@@ -201,31 +208,19 @@ public class TMD710GChannel implements Channel {
 		if(dir.equals("+")) {
 			p4=1; //Up
 			p12=freq;
+			p14=0;
 		} else if(dir.equals("-")) {
 			p4=2; //Down
 			p12=freq;
+			p14=0;
 		} else if(dir.equals("split")) {
-			/* From the initial description of the protocol,
-			 * it seems that there is no split and that we need
-			 * to fake it with other methods.  This is the code
-			 * for faking it.
-			
-			if(freq>getRXFrequency()) {
-				p15=1; //Up
-				p3=freq-getRXFrequency();
-			}else if(freq<getRXFrequency()) {
-				p15=2; //Down
-				p3=getRXFrequency()-freq;
-			}else {
-				p15=0;//simplex
-			}
-			*/
-			
-			
-			p4=3; //TODO Is this the right way to do split?
-			p12=freq;
+			p4=0; //Would be simplex, except the offset is set.
+			//TODO Verify that the transmit frequency fits a legal step size.
+			p14=freq;
+			p12=0;
 		} else {
 			p4=0; //simplex
+			p14=0;
 		}
 	}
 	

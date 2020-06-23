@@ -41,14 +41,27 @@ public class TMD710G implements CATRadio {
 		TMD710GChannel channel=new TMD710GChannel(ch);
 		System.out.println(Main.RenderChannel(channel));
 		channel.setIndex(index);
+		
+		/*
+		 * Unlike the D74, the D710 does not echo the channel back,
+		 * so we'll read it manually to compare the values.
+		 */
 		String cmdme=channel.renderme();
-		String res=rawCommand(cmdme);
+		rawCommand(cmdme);
+		String res=rawCommand(String.format("ME %03d", index));
 		if(!cmdme.equals(res)) {
 			System.out.println("Command disagrees with response:\n"+cmdme+"\n"+res);
 			System.exit(1);
 		}
 		
-		//TODO Memory Name
+		// Then we set the name.
+		String cmdmn=channel.rendermn();
+		rawCommand(cmdmn);
+		res=rawCommand(String.format("MN %03d", index));
+		if(!cmdmn.equals(res)) {
+			System.out.println("Command disagrees with response:\n"+cmdme+"\n"+res);
+			System.exit(1);
+		}
 	}
 	
 
