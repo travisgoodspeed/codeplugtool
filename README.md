@@ -1,8 +1,9 @@
 Howdy y'all,
 
-This is a friendly CAT tool for the Kenwood TH-D74 written in Java for
-the command line, with the aim of eventually supporting many radios
-and running over Bluetooth from an Android phone.
+This is a friendly CAT tool for the Kenwood TH-D72, TH-D74 and TH-D710
+written in Java for the command line, with the aim of eventually
+supporting many radios and running over Bluetooth from an Android
+phone.  The Yaesu FT-991A and other radios are partially supported.
 
 73 de Knoxville,
 
@@ -53,24 +54,30 @@ a list of available drivers, ports, and verbs.
 Usage with no parameters,
 
 ```
-dell% java -jar CodePlugTool.jar                 
+dell% java -jar CodePlugTool.jar 
 Usage: 
 cpt [driver] [port/file] [verbs]
 
 Drivers:
         Kenwood
                 d74 -- TH-D74 Tri-Band HT
+                d710 -- TM-D710 Mobile
+        Yaesu
+                991a -- Yaesu FT-991A
         Others
                 csv -- Chirp's CSV format.
 Ports:
         ttyS0   -- Physical Port S0
+        ttyS2   -- Physical Port S2
+        ttyS1   -- Physical Port S1
         ttyUSB1 -- USB-to-Serial Port (cp210x)
         ttyUSB0 -- USB-to-Serial Port (cp210x)
-        ttyACM0 -- TH-D74
 Verbs:
-        dump           -- Dumps the radio's channels to the console.
-        info           -- Prints the radio's info.
-        upload foo.csv -- Uploads a CSV file from CHIRP to the radio.
+        info             -- Prints the radio's info.
+        dump             -- Dumps the radio's channels to the console.
+        upload foo.csv   -- Uploads a CSV file from CHIRP to the radio.
+        download foo.csv -- Downloads a CSV file from the radio.
+        raw 'ME 000'   -- Runs a raw command and prints the result.
 ```
 
 Viewing the radio settings,
