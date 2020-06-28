@@ -3,7 +3,7 @@ Howdy y'all,
 This is a friendly CAT tool for the Kenwood TH-D72, TH-D74 and TH-D710
 written in Java for the command line, with the aim of eventually
 supporting many radios and running over Bluetooth from an Android
-phone.  The Yaesu FT-991A and other radios are partially supported.
+phone.  The Yaesu FT-991A is partially supported.
 
 73 de Knoxville,
 
@@ -18,6 +18,10 @@ embedded in the repo and statically linked into `CodePlugTool.jar`.
 
 On Android, we'll instead be using the built-in Bluetooth RFCOMM
 libraries.
+
+TCP connections are supported, both for hardware network serial port
+servers and quick and dirty ones built with `socat`.
+
 
 ## Building
 
