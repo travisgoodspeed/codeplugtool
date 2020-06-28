@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.kk4vcz.codeplug.connections.JSerialCommConnection;
+import com.kk4vcz.codeplug.connections.TCPConnection;
 import com.kk4vcz.codeplug.radios.kenwood.THD72;
 import com.kk4vcz.codeplug.radios.kenwood.THD74;
 import com.kk4vcz.codeplug.radios.kenwood.TMD710G;
@@ -21,8 +22,8 @@ import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 
 public class CommandLineInterface {
 	public static void usage() {
-		System.out.print("Usage: \n" + "cpt [driver] [port/file] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
-				+ "\t\td74 -- TH-D74 Tri-Band HT\n"+ "\t\td710 -- TM-D710 Mobile\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
+		System.out.print("Usage: \n" + "cpt [driver] [device/hostname:port] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
+				+ "\t\td72 -- TH-D72 Dual-Band HT\n" + "\t\td74 -- TH-D74 Tri-Band HT\n"+ "\t\td710 -- TM-D710 Mobile\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
 				+ "Ports:\n");
 		
 		SerialPort[] ports=SerialPort.getCommPorts();
@@ -37,6 +38,11 @@ public class CommandLineInterface {
 				"\tupload foo.csv   -- Uploads a CSV file from CHIRP to the radio.\n"+
 				"\tdownload foo.csv -- Downloads a CSV file from the radio.\n"+
 				"\traw \'ME 000\'   -- Runs a raw command and prints the result.\n"
+				);
+		System.out.print(
+				"Examples:\n"+
+				"\tjava -jar CodePlugTool.jar d710 ttyS1 info\n"+
+				"\tjava -jar CodePlugTool.jar d74 localhost:54321 info\n"
 				);
 		
 	}
@@ -91,6 +97,12 @@ public class CommandLineInterface {
 		}
 	}
 	
+	static RadioConnection getConnection(String path) throws IOException{
+		if(path.indexOf(':')>0) {
+			return TCPConnection.getConnection(path);
+		}
+		return JSerialCommConnection.getConnection(path);
+	}
 	
 
 	public static void main(String[] args) {
@@ -106,19 +118,19 @@ public class CommandLineInterface {
 			CATRadio radio=null;
 			
 			if (driver.equals("d74")) {
-				conn = JSerialCommConnection.getConnection(args[1]);
+				conn = getConnection(args[1]);
 				conn.setBaudRate(9600);
 				radio = new THD74(conn.getInputStream(), conn.getOutputStream());
 			} else if (driver.equals("d72")) {
-				conn = JSerialCommConnection.getConnection(args[1]);
+				conn = getConnection(args[1]);
 				conn.setBaudRate(9600);
 				radio = new THD72(conn.getInputStream(), conn.getOutputStream());
 			} else if (driver.equals("d710")) {
-				conn = JSerialCommConnection.getConnection(args[1]);
+				conn = getConnection(args[1]);
 				conn.setBaudRate(57600);
 				radio = new TMD710G(conn.getInputStream(), conn.getOutputStream());
 			} else if (driver.equals("991a")) {
-				conn = JSerialCommConnection.getConnection(args[1]);
+				conn = getConnection(args[1]);
 				conn.setBaudRate(38400);
 				radio = new FT991A(conn.getInputStream(), conn.getOutputStream());
 			} else {

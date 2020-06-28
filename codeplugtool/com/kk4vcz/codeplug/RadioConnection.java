@@ -1,5 +1,6 @@
 package com.kk4vcz.codeplug;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -13,8 +14,8 @@ import java.io.OutputStream;
  */
 
 public interface RadioConnection {
-	InputStream getInputStream();
-	OutputStream getOutputStream();
+	InputStream getInputStream() throws IOException;
+	OutputStream getOutputStream() throws IOException;
 	
 	int setBaudRate(int baudrate);
 	boolean isOpen();
