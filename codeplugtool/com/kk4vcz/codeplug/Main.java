@@ -24,6 +24,7 @@ public class Main {
 		dst.setToneFreq(src.getToneFreq());
 		dst.setToneMode(src.getToneMode());
 		dst.setDTCSCode(src.getDTCSCode());
+		dst.setURCALL(src.getURCALL());
 	}
 
 	// Utility function to print a channel.

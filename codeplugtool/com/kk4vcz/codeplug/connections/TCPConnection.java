@@ -17,8 +17,8 @@ import com.kk4vcz.codeplug.RadioConnection;
 
 public class TCPConnection implements RadioConnection {
 	public static void main(String[] args) {
-		String[] newargs= {"d710n", "localhost:54321", "info"};
-		//String[] newargs= {"d710", "ttyS1", "dump"};
+		String[] newargs= {"d710", "localhost:54321", "info"};
+		//String[] newargs= {"d710", "localhost:54321", "dump"};
 		CommandLineInterface.main(newargs);
 	}
 	
