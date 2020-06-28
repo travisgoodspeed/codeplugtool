@@ -18,8 +18,8 @@ public class THD72 implements CATRadio {
 	
 	//Test routine.
 	public static void main(String[] args) {
-		//String[] newargs= {"d72", "ttyUSB2", "info"};
-		String[] newargs= {"d72", "ttyUSB2", "dump"};
+		String[] newargs= {"d72", "ttyUSB2", "info"};
+		//String[] newargs= {"d72", "ttyUSB2", "dump"};
 		CommandLineInterface.main(newargs);
 	}
 

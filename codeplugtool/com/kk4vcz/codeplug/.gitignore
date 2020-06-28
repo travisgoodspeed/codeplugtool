@@ -5,3 +5,5 @@
 /ImageRadio.class
 /CSVChannel.class
 /CommandLineInterface.class
+/Connection.class
+/RadioConnection.class

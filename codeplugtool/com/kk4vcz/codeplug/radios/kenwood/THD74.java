@@ -25,6 +25,14 @@ public class THD74 implements CATRadio {
 	BufferedReader reader;
 	PrintWriter writer;
 	
+	//Test routine.
+	public static void main(String[] args) {
+		//String[] newargs= {"d74", "ttyACM0", "upload", "knoxville.csv"};
+		//String[] newargs= {"d74", "ttyACM0", "dump"};
+		String[] newargs= {"d74", "ttyACM0", "info"};
+		CommandLineInterface.main(newargs);
+	}
+	
 	
 	public THD74(InputStream is, OutputStream os) throws IOException {
 		reader=new BufferedReader(new InputStreamReader(is));
@@ -126,12 +134,7 @@ public class THD74 implements CATRadio {
 		return pair[0];
 	}
 	
-	//Test routine.
-	public static void main(String[] args) {
-		String[] newargs= {"d74", "ttyACM0", "upload", "knoxville.csv"};
-		//String[] newargs= {"d74", "ttyACM0", "dump"};
-		CommandLineInterface.main(newargs);
-	}
+
 
 	@Override
 	public int getChannelMin() throws IOException {

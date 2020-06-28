@@ -25,8 +25,8 @@ public class TMD710G implements CATRadio {
 	
 	//Test routine.
 	public static void main(String[] args) {
-		//String[] newargs= {"d710", "ttyS1", "info"};
-		String[] newargs= {"d710", "ttyS1", "dump"};
+		String[] newargs= {"d710", "ttyS1", "info"};
+		//String[] newargs= {"d710", "ttyS1", "dump"};
 		CommandLineInterface.main(newargs);
 	}
 
@@ -37,7 +37,6 @@ public class TMD710G implements CATRadio {
 
 	@Override
 	public void writeChannel(int index, Channel ch) throws IOException {
-		// TODO Auto-generated method stub
 		TMD710GChannel channel=new TMD710GChannel(ch);
 		System.out.println(Main.RenderChannel(channel));
 		channel.setIndex(index);

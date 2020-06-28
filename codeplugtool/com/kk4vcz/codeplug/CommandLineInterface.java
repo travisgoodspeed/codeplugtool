@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.kk4vcz.codeplug.connections.JSerialCommConnection;
 import com.kk4vcz.codeplug.radios.kenwood.THD72;
 import com.kk4vcz.codeplug.radios.kenwood.THD74;
 import com.kk4vcz.codeplug.radios.kenwood.TMD710G;
@@ -89,6 +90,8 @@ public class CommandLineInterface {
 			radio.peek32(i);
 		}
 	}
+	
+	
 
 	public static void main(String[] args) {
 		if (args.length < 3) {
@@ -99,53 +102,25 @@ public class CommandLineInterface {
 		String driver = args[0];
 
 		try {
-			SerialPort port;
+			RadioConnection conn;
 			CATRadio radio=null;
 			
 			if (driver.equals("d74")) {
-				port = SerialPort.getCommPort(args[1]);
-				if(!port.openPort()) {
-					System.out.println("Failed to open "+args[1]);
-					System.exit(1);
-				}
-				
-				port.setBaudRate(9600);
-				// 1ms response time.
-				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
-				radio = new THD74(port.getInputStream(), port.getOutputStream());
-			} else if (driver.equals("d710")) {
-				port = SerialPort.getCommPort(args[1]);
-				if(!port.openPort()) {
-					System.out.println("Failed to open "+args[1]);
-					System.exit(1);
-				}
-				
-				port.setBaudRate(57600);
-				// 1ms response time.
-				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
-				radio = new TMD710G(port.getInputStream(), port.getOutputStream());
+				conn = JSerialCommConnection.getConnection(args[1]);
+				conn.setBaudRate(9600);
+				radio = new THD74(conn.getInputStream(), conn.getOutputStream());
 			} else if (driver.equals("d72")) {
-				port = SerialPort.getCommPort(args[1]);
-				if(!port.openPort()) {
-					System.out.println("Failed to open "+args[1]);
-					System.exit(1);
-				}
-				
-				port.setBaudRate(9600);
-				// 1ms response time.
-				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0);
-				radio = new THD72(port.getInputStream(), port.getOutputStream());
+				conn = JSerialCommConnection.getConnection(args[1]);
+				conn.setBaudRate(9600);
+				radio = new THD72(conn.getInputStream(), conn.getOutputStream());
+			} else if (driver.equals("d710")) {
+				conn = JSerialCommConnection.getConnection(args[1]);
+				conn.setBaudRate(57600);
+				radio = new TMD710G(conn.getInputStream(), conn.getOutputStream());
 			} else if (driver.equals("991a")) {
-				port = SerialPort.getCommPort(args[1]);
-				if(!port.openPort()) {
-					System.out.println("Failed to open "+args[1]);
-					System.exit(1);
-				}
-				
-				port.setBaudRate(38400);
-				// 1ms response time.
-				port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1, 0); //TODO fix this timeout by sampling individual bytes.
-				radio = new FT991A(port.getInputStream(), port.getOutputStream());
+				conn = JSerialCommConnection.getConnection(args[1]);
+				conn.setBaudRate(38400);
+				radio = new FT991A(conn.getInputStream(), conn.getOutputStream());
 			} else {
 				System.out.println("Unknown driver "+args[0]);
 				System.exit(1);
