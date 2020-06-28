@@ -49,7 +49,7 @@ public class THD74 implements CATRadio {
 		writer.print(cmd+"\r");
 		writer.flush();
 		
-		return reader.readLine().strip();
+		return reader.readLine().trim();
 	}
 	
 

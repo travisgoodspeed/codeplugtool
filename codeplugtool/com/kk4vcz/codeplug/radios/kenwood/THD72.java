@@ -59,7 +59,7 @@ public class THD72 implements CATRadio {
 		String cmdmn=channel.rendermn();
 		rawCommand(cmdmn);
 		res=rawCommand(String.format("MN %03d", index));
-		if(!cmdmn.strip().equals(res.strip())) {
+		if(!cmdmn.trim().equals(res.trim())) {
 			System.out.println("Command disagrees with response:\n"+cmdmn+"\n"+res);
 			System.exit(1);
 		}
@@ -161,7 +161,7 @@ public class THD72 implements CATRadio {
 		writer.print(cmd+"\r");
 		writer.flush();
 		
-		return reader.readLine().strip();
+		return reader.readLine().trim();
 	}
 
 	@Override

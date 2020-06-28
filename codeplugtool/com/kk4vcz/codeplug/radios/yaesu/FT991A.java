@@ -39,7 +39,7 @@ public class FT991A implements CATRadio {
 		char[] line=new char[1024];
 		reader.read(line);
 		
-		return new String(line).strip();
+		return new String(line).trim();
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class FT991A implements CATRadio {
 		//c1^=adr;
 		c2^=adr;
 		
-		String res=rawCommand(String.format("SPR%c%c%c", c0,c1,c2)).strip();
+		String res=rawCommand(String.format("SPR%c%c%c", c0,c1,c2)).trim();
 		if(res.charAt(0)!='?') {
 			System.out.format("Got a reply to SPR %2x %2x %2x: %s\n",
 					(int) c0, (int) c1, (int) c2,
