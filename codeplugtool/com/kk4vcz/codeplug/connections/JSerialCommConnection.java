@@ -1,5 +1,6 @@
 package com.kk4vcz.codeplug.connections;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -46,6 +47,11 @@ public class JSerialCommConnection implements RadioConnection {
 	@Override
 	public boolean isOpen() {
 		return port.isOpen();
+	}
+
+	@Override
+	public void close() throws IOException {
+		port.closePort();
 	}
 
 }

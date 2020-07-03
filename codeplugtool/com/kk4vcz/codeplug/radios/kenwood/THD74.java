@@ -37,6 +37,10 @@ public class THD74 implements CATRadio {
 	public THD74(InputStream is, OutputStream os) throws IOException {
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
+		
+		//Send two bad commands to flush out the channel.
+		rawCommand("asdf");
+		rawCommand("asdf");
 	}
 	
 	@Override

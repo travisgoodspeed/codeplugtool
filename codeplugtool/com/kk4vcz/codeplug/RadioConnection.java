@@ -19,4 +19,6 @@ public interface RadioConnection {
 	
 	int setBaudRate(int baudrate);
 	boolean isOpen();
+	
+	void close() throws IOException;
 }

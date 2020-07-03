@@ -58,4 +58,9 @@ public class TCPConnection implements RadioConnection {
 	public boolean isOpen() {
 		return socket.isConnected();
 	}
+
+	@Override
+	public void close() throws IOException {
+		socket.close();
+	}
 }

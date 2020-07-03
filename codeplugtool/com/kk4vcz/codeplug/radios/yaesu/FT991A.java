@@ -28,6 +28,8 @@ public class FT991A implements CATRadio {
 	public FT991A(InputStream is, OutputStream os) throws IOException {
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
+		
+		rawCommand("ID");
 	}
 	
 
