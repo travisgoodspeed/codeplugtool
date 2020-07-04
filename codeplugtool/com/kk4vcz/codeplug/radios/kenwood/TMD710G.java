@@ -31,12 +31,13 @@ public class TMD710G implements CATRadio {
 	}
 
 	
-	public TMD710G(InputStream is, OutputStream os) throws IOException {
-		os.write("\r".getBytes());
-		os.flush();
-		
+	public TMD710G(InputStream is, OutputStream os) throws IOException {	
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
+
+		//Fake transaction to clear buffers.
+		writer.write("asdf\r");
+		writer.flush();
 		reader.readLine();
 	}
 

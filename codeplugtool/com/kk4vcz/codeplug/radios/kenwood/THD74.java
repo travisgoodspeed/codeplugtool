@@ -35,11 +35,12 @@ public class THD74 implements CATRadio {
 	
 	
 	public THD74(InputStream is, OutputStream os) throws IOException {
-		os.write("\r".getBytes());
-		os.flush();
-		
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
+		
+		//Fake transaction to clear buffers.
+		writer.write("asdf\r");
+		writer.flush();
 		reader.readLine();
 	}
 	
