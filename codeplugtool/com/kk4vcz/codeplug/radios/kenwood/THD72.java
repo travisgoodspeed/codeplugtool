@@ -24,12 +24,12 @@ public class THD72 implements CATRadio {
 	}
 
 	public THD72(InputStream is, OutputStream os) throws IOException {
+		os.write("\r".getBytes());
+		os.flush();
+		
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
-		
-		//Send two bad commands to flush out the channel.
-		rawCommand("asdf");
-		rawCommand("asdf");
+		reader.readLine();
 	}
 
 	@Override

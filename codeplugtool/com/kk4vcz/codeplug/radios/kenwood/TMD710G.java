@@ -30,13 +30,14 @@ public class TMD710G implements CATRadio {
 		CommandLineInterface.main(newargs);
 	}
 
+	
 	public TMD710G(InputStream is, OutputStream os) throws IOException {
+		os.write("\r".getBytes());
+		os.flush();
+		
 		reader=new BufferedReader(new InputStreamReader(is));
 		writer=new PrintWriter(os);
-		
-		//Send two bad commands to flush out the channel.
-		rawCommand("asdf");
-		rawCommand("asdf");
+		reader.readLine();
 	}
 
 	@Override

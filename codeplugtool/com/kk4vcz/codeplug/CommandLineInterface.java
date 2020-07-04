@@ -114,7 +114,7 @@ public class CommandLineInterface {
 		String driver = args[0];
 
 		try {
-			RadioConnection conn;
+			RadioConnection conn=null;
 			CATRadio radio=null;
 			
 			if (driver.equals("d74")) {
@@ -156,6 +156,9 @@ public class CommandLineInterface {
 					System.out.println(radio.rawCommand(args[++i]));
 				}
 			}
+			
+			if(conn!=null)
+				conn.close();
 
 		} catch (IOException e) {
 			e.printStackTrace();
