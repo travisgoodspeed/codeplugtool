@@ -47,7 +47,7 @@ public class FT991A implements CATRadio {
 	@Override
 	public void writeChannel(int index, Channel ch) throws IOException {
 		// TODO Auto-generated method stub
-
+		System.err.println("Can't write to Yaesu channels yet.");
 	}
 
 	@Override

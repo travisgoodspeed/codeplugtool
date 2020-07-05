@@ -1,4 +1,9 @@
-package com.kk4vcz.codeplug;
+package com.kk4vcz.codeplug.radios.other;
+
+import java.io.IOException;
+
+import com.kk4vcz.codeplug.Channel;
+import com.kk4vcz.codeplug.Main;
 
 /* This is a simple implementation of CSV channel entries, compatible with those from Chirp.
  * Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPolarity,Mode,TStep,Skip,Comment,URCALL,RPT1CALL,RPT2CALL,DVCODE
@@ -13,9 +18,30 @@ package com.kk4vcz.codeplug;
  */
 
 public class CSVChannel implements Channel {
+	public static void main(String[] args) {
+		//Render an empty channel.
+		CSVChannel ch=new CSVChannel();
+		System.out.println(Main.RenderChannel(ch));
+		System.out.print(ch.renderCSV());
+		
+		String b="0,,146.520000,off,0.000000,Tone,100.0,100.0,265,NN,FM,5.00,,,,,,";
+		ch=new CSVChannel(b);
+		System.out.println(Main.RenderChannel(ch));
+		System.out.print(ch.renderCSV());
+		System.out.println(b);;
+		
+		String c="10,W4KEV,145.370000,-,0.600000,Tone,100.0,100.0,023,NN,FM,5.00,,\"Knoxville, Sharps Ridge\",,,,";
+		ch=new CSVChannel(c);
+		System.out.println(Main.RenderChannel(ch));
+		System.out.print(ch.renderCSV());
+		System.out.println(c);
+	}
+	
+	
+	
 	private void parse(String line) {
 		/*
-		 * This is an ugly-ass shotgun parser.  It should be rewirtten properly when time allows.
+		 * This is an ugly-ass shotgun parser.  It should be rewritten properly when time allows.
 		 */
 		String[] words=line.split(",");
 		setIndex(Integer.parseInt(words[0]));
@@ -23,7 +49,6 @@ public class CSVChannel implements Channel {
 		setRXFrequency((long) (Double.parseDouble(words[2])*1000000.0));
 		setOffset(words[3], (long) (Double.parseDouble(words[4])*1000000.0));
 		
-		//TODO tones
 		
 		String tm=words[5];
 		if(tm.equals("")) {
@@ -45,10 +70,30 @@ public class CSVChannel implements Channel {
 			setDTCSCode(Integer.parseInt(words[8]));
 		else
 			setDTCSCode(0);
+		
+		//TODO TStep
 		//TODO URCALL
 	}
+	public String renderCSV() {
+		//return String.format("%d %s %f\n", getIndex(), getName(), getRXFrequency()/1000000.0);
+		
+		return String.format("%d,%s,%f,%s,%f,%s,%3.1f,%3.1f,%03d,%s,%s,5.00,,,,,,\n",
+				index, name, getRXFrequency()/1000000.0, splitdir, getOffset()/1000000.0,
+				getToneModeForExport(), getToneFreqForExport()/10.0, getToneFreqForExport()/10.0, getDTCSCode(),
+				"NN", getMode()
+				);
+	}
+	
 	public CSVChannel(String line) {
 		parse(line);
+	}
+	public CSVChannel() {
+		//parse(line);
+		//TODO We should set some basic defaults here.
+	}
+	
+	public CSVChannel(Channel src) throws IOException {
+		Main.ApplyChannel(this, src);
 	}
 
 	private int index=0;
@@ -131,6 +176,14 @@ public class CSVChannel implements Channel {
 	public int getToneFreq() {
 		return tonefreq;
 	}
+	private int getToneFreqForExport() {
+		//CHIRP freaks out if the tone frequency is zero, even when unused.
+		if(tonefreq==0)
+			return 1000;
+		
+		return tonefreq;
+	}
+	
 	@Override
 	public void setToneFreq(int freq) {
 		tonefreq=freq;
@@ -141,6 +194,21 @@ public class CSVChannel implements Channel {
 	public String getToneMode() {
 		return tonemode;
 	}
+	private String getToneModeForExport() {
+		if(tonemode.equals("tone")) {
+			return "Tone";
+		} else if(tonemode.equals("ct")) {
+			return "TSQL";
+		} else if(tonemode.equals("dcs")) {
+			return "DTCS";
+		} else if(tonemode.equals("")) {
+			return "";
+		} else {
+			return tonemode;
+		}
+	}
+	
+	
 	@Override
 	public void setToneMode(String mode) {
 		if(mode.equals("") || mode.equals("tone") || mode.equals("ct") || mode.equals("dcs")) {

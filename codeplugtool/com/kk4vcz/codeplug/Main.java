@@ -1,7 +1,5 @@
 package com.kk4vcz.codeplug;
 
-import com.kk4vcz.codeplug.connections.JSerialCommConnection;
-
 /* Hey y'all,
  * 
  * This class contains the main() method for self-testing, as well as some janky static functions
@@ -12,7 +10,6 @@ import com.kk4vcz.codeplug.connections.JSerialCommConnection;
  */
 
 public class Main {
-
 	// Utility function to apply the values of the second parameter to the first.
 	public static void ApplyChannel(Channel dst, Channel src) {
 		dst.setRXFrequency(src.getRXFrequency());
@@ -66,10 +63,4 @@ public class Main {
 		return String.format("%03d %5s %14s %s %s", c.getIndex(), c.getMode(), freq, tone, c.getName());
 	}
 	
-	//Utility function to get a connection in unix.  Fails in Android.
-	public static RadioConnection getConnection(String source) {
-		//TODO Handle types other than serial ports.
-		return JSerialCommConnection.getConnection(source);
-	}
-
 }

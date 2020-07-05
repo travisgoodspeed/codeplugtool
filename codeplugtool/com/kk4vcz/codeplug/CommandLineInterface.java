@@ -11,6 +11,8 @@ import com.kk4vcz.codeplug.connections.TCPConnection;
 import com.kk4vcz.codeplug.radios.kenwood.THD72;
 import com.kk4vcz.codeplug.radios.kenwood.THD74;
 import com.kk4vcz.codeplug.radios.kenwood.TMD710G;
+import com.kk4vcz.codeplug.radios.other.CSVChannel;
+import com.kk4vcz.codeplug.radios.other.ChirpCSV;
 import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 
 /*
@@ -22,8 +24,18 @@ import com.kk4vcz.codeplug.radios.yaesu.FT991A;
 
 public class CommandLineInterface {
 	public static void usage() {
-		System.out.print("Usage: \n" + "cpt [driver] [device/hostname:port] [verbs]\n\n" + "Drivers:\n" + "\tKenwood\n"
-				+ "\t\td72 -- TH-D72 Dual-Band HT\n" + "\t\td74 -- TH-D74 Tri-Band HT\n"+ "\t\td710 -- TM-D710 Mobile\n" + "\tYaesu\n" + "\t\t991a -- Yaesu FT-991A\n" + "\tOthers\n" + "\t\tcsv -- Chirp's CSV format.\n"
+		System.out.print(
+				"Usage: \n" +
+				"cpt [driver] [device/hostname:port] [verbs]\n\n" + 
+				"Drivers:\n"+
+					"\tKenwood\n"+
+						"\t\td72 -- TH-D72 Dual-Band HT\n"+
+						"\t\td74 -- TH-D74 Tri-Band HT\n"+
+						"\t\td710 -- TM-D710 Mobile\n"+
+					"\tYaesu\n"+
+						"\t\t991a -- Yaesu FT-991A\n"+
+					"\tOthers\n"+
+						"\t\tcsv -- Chirp's CSV format.\n"
 				+ "Ports:\n");
 		
 		SerialPort[] ports=SerialPort.getCommPorts();
@@ -53,7 +65,6 @@ public class CommandLineInterface {
 			if (c != null)
 				System.out.println(Main.RenderChannel(c));
 		}
-
 	}
 	
 	public static void upload(Radio radio, String filename) throws IOException{
@@ -70,8 +81,14 @@ public class CommandLineInterface {
 			}
 		}
 		reader.close();
-
+		
 		System.out.println("done");
+	}
+	
+	public static void download(Radio radio, String filename) throws IOException{
+		System.out.println(String.format("Downloading channels from radio to %s.  This might take a while.", filename));
+		ChirpCSV r=new ChirpCSV(radio);
+		r.exportToFile(new File(filename));
 	}
 	
 	public static void erase(Radio radio) throws IOException{
@@ -148,8 +165,7 @@ public class CommandLineInterface {
 				}else if(args[i].equals("upload")) {
 					upload(radio, args[++i]);
 				}else if(args[i].equals("download")) {
-					//download(radio, args[++i]);
-					System.out.println("Downloading to CSV isn't implemented yet.");
+					download(radio, args[++i]);
 				}else if(args[i].equals("erase")) {
 					erase(radio);
 				}else if(args[i].equals("raw")) {
