@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 import com.kk4vcz.codeplug.Channel;
 import com.kk4vcz.codeplug.Radio;
@@ -56,8 +60,41 @@ public class ChirpCSV implements Radio {
 		System.out.println("done");
 	}
 	
+	//Read a file.
+	public ChirpCSV(InputStream is) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+		// Toss the first line, which contains the header.
+		reader.readLine();
+		// Print the body lines.
+		while(reader.ready()) {
+			Channel c = new CSVChannel(reader.readLine());
+			if (c != null) {
+				writeChannel(c.getIndex(), c);
+			}
+		}
+		reader.close();
+		System.out.println("done");
+	}
+	
 	public void exportToFile(File f) throws IOException {
 		BufferedWriter writer=new BufferedWriter(new FileWriter(f));
+		
+		//Standard header.
+		writer.write("Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPolarity,Mode,TStep,Skip,Comment,URCALL,RPT1CALL,RPT2CALL,DVCODE\n");
+		for(int i=getChannelMin(); i<=getChannelMax(); i++) {
+			CSVChannel ch=channels[i];
+			if(ch!=null) {
+				writer.write(ch.renderCSV());
+			}
+		}
+		
+		writer.flush();
+		writer.close();
+	}
+	
+	public void exportToOutputStream(OutputStream os) throws IOException {
+		BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(os));
 		
 		//Standard header.
 		writer.write("Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPolarity,Mode,TStep,Skip,Comment,URCALL,RPT1CALL,RPT2CALL,DVCODE\n");
