@@ -1,9 +1,15 @@
+# Goodspeed's Codeplug Tool
+
+
 Howdy y'all,
 
-This is a friendly CAT tool for the Kenwood TH-D72, TH-D74 and TH-D710
-written in Java for the command line, with the aim of eventually
-supporting many radios and running over Bluetooth from an Android
-phone.  The Yaesu FT-991A is partially supported.
+This is a CAT and memory programming library for the Kenwood TH-D72,
+TH-D74 and TH-D710 written in portable Java, with a command-line
+interface for use on desktop computers.
+
+A matching frontend for Android is available in separate git repo as
+[CATTool](https://github.com/travisgoodspeed/cattool), which calls
+this library as a dependency.
 
 73 de Knoxville,
 
@@ -16,12 +22,10 @@ The [jSerialComm](https://github.com/Fazecast/jSerialComm) library is
 used to provide a serial port connection for the CLI tool.  It is
 embedded in the repo and statically linked into `CodePlugTool.jar`.
 
-On Android, we'll instead be using the built-in Bluetooth RFCOMM
-libraries.
-
-TCP connections are supported, both for hardware network serial port
-servers and quick and dirty ones built with `socat`.
-
+Code compiles with the latest Java, but Java 8 compatibility is
+strictly maintained for use in Android.  TCP connections are
+supported, both for hardware network serial port servers and quick and
+dirty ones built with `socat`.
 
 ## Building
 
@@ -55,7 +59,7 @@ to to direct the tool around.  Run the tool with no parameters to see
 a list of available drivers, ports, and verbs.
 
 
-Usage with no parameters,
+Usage is presented when run without parameters.
 
 ```
 dell% java -jar CodePlugTool.jar 
