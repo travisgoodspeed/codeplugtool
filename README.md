@@ -7,7 +7,7 @@ This is a CAT and memory programming library for the Kenwood TH-D72,
 TH-D74 and TH-D710 written in portable Java, with a command-line
 interface for use on desktop computers.
 
-A matching frontend for Android is available in separate git repo as
+A matching frontend for Android is available in a separate git repo as
 [CATTool](https://github.com/travisgoodspeed/cattool), which calls
 this library as a dependency.
 

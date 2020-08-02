@@ -27,7 +27,7 @@ public interface Channel {
 	
 	int getToneFreq();
 	void setToneFreq(int freq);
-	String getToneMode();          //"", "tone", or "ct"
+	String getToneMode();          //"", "dcs", "tone", or "ct"
 	void setToneMode(String mode);
 	
 	
