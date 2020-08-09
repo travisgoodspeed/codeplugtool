@@ -35,6 +35,12 @@ public class CSVChannel implements Channel {
 		System.out.println(Main.RenderChannel(ch));
 		System.out.print(ch.renderCSV());
 		System.out.println(c);
+		
+		String d="46,W4KEV,146.88000,-,0.60000,,88.5,88.5,023,NN,Auto,5,\"Knoxville, Sharps Ridge \",";
+		ch=new CSVChannel(d);
+		System.out.println(Main.RenderChannel(ch));
+		System.out.print(ch.renderCSV());
+		System.out.println(d);
 	}
 	
 	
@@ -153,7 +159,7 @@ public class CSVChannel implements Channel {
 	}
 	@Override
 	public void setMode(String m) {
-		if(m.equals("Auto"))
+		if(m.equals("Auto"))  //TODO: Support Yaesu System Fusion directly rather than falling back to Auto.
 			mode="FM";
 		else
 			mode=m;

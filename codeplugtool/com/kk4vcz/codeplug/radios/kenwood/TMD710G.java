@@ -51,8 +51,8 @@ public class TMD710G implements CATRadio {
 		 * bands using the standard ME command.  I don't know why, but perhaps the VFO
 		 * could be used as a workaround?
 		 */
-		if(ch.getRXFrequency()>500000000) {
-			System.out.format("Cowardly refusing to write %f MHz to memory %03d.\n", (float) ch.getRXFrequency(), index);
+		if(ch.getRXFrequency()>500000000 || ch.getRXFrequency()<136000000) {
+			System.err.format("Cowardly refusing to write %f MHz to memory %03d.\n", (float) ch.getRXFrequency(), index);
 			return;
 		}
 		
@@ -64,7 +64,7 @@ public class TMD710G implements CATRadio {
 		rawCommand(cmdme);
 		String res=rawCommand(String.format("ME %03d", index));
 		if(!cmdme.equals(res)) {
-			System.out.println("Command disagrees with response:\n"+cmdme+"\n"+res);
+			System.err.println("Command disagrees with response:\n"+cmdme+"\n"+res);
 			System.exit(1);
 		}
 		
@@ -73,7 +73,7 @@ public class TMD710G implements CATRadio {
 		rawCommand(cmdmn);
 		res=rawCommand(String.format("MN %03d", index));
 		if(!cmdmn.trim().equals(res.trim())) {
-			System.out.println("Command disagrees with response:\n"+cmdmn+"\n"+res);
+			System.err.println("Command disagrees with response:\n"+cmdmn+"\n"+res);
 			System.exit(1);
 		}
 	}

@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kk4vcz.codeplug.CommandLineInterface;
 import com.kk4vcz.codeplug.Radio;
 import com.kk4vcz.codeplug.RadioAPI;
 import com.kk4vcz.codeplug.radios.other.ChirpCSV;
@@ -22,9 +23,11 @@ public class RepeaterBook implements RadioAPI {
 	public static void main(String[] args) {
 		System.out.println("Testing a simple RepeaterBook query:");
 		RepeaterBook rb=new RepeaterBook();
+		Radio res;
 		
 		try {
-			rb.queryProximity("Knoxville, TN", 100, 0);
+			res=rb.queryProximity("Knoxville, TN", 25, 0);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -63,8 +66,8 @@ public class RepeaterBook implements RadioAPI {
 			
 			
 			// Two servers support this protocol.
-			URL url = new URL("https://www.repeaterbook.com/repeaters/downloads/CHIRP/app_direct.php?"+ParameterStringBuilder.getParamsString(parameters));
-			//URL url = new URL("http://chirp.danplanet.com/query/rb/1.0/app_direct?"+ParameterStringBuilder.getParamsString(parameters));
+			//URL url = new URL("https://www.repeaterbook.com/repeaters/downloads/CHIRP/app_direct.php?"+ParameterStringBuilder.getParamsString(parameters));
+			URL url = new URL("http://chirp.danplanet.com/query/rb/1.0/app_direct?"+ParameterStringBuilder.getParamsString(parameters));
 			
 			
 			//Begin with the simple connection.
@@ -101,6 +104,7 @@ public class RepeaterBook implements RadioAPI {
 			    try {
 			    	CSVChannel ch=new CSVChannel(inputLine);
 			    	csvradio.writeChannel(i++,  ch);
+			    	System.out.println(inputLine);
 			    }catch(Exception e) {
 			    	e.printStackTrace();
 			    	System.err.println("Error parsing channel: "+inputLine);
@@ -109,7 +113,7 @@ public class RepeaterBook implements RadioAPI {
 			}
 			in.close();
 			
-			System.out.println(content);
+			//System.out.println(content);
 			
 			return csvradio;
 			

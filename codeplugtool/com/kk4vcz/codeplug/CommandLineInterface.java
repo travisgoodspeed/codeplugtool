@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.kk4vcz.codeplug.api.RepeaterBook;
 import com.kk4vcz.codeplug.connections.JSerialCommConnection;
 import com.kk4vcz.codeplug.connections.TCPConnection;
 import com.kk4vcz.codeplug.radios.kenwood.THD72;
@@ -29,13 +30,13 @@ public class CommandLineInterface {
 				"cpt [driver] [device/hostname:port] [verbs]\n\n" + 
 				"Drivers:\n"+
 					"\tKenwood\n"+
-						"\t\td72 -- TH-D72 Dual-Band HT\n"+
-						"\t\td74 -- TH-D74 Tri-Band HT\n"+
+						"\t\td72  -- TH-D72 Dual-Band HT\n"+
+						"\t\td74  -- TH-D74 Tri-Band HT\n"+
 						"\t\td710 -- TM-D710 Mobile\n"+
 					"\tYaesu\n"+
 						"\t\t991a -- Yaesu FT-991A\n"+
 					"\tOthers\n"+
-						"\t\tcsv -- Chirp's CSV format.\n"
+						"\t\tcsv  -- Chirp's CSV format.\n"
 				+ "Ports:\n");
 		
 		SerialPort[] ports=SerialPort.getCommPorts();
@@ -45,11 +46,12 @@ public class CommandLineInterface {
 		
 		System.out.print(
 				"Verbs:\n"+
-				"\tinfo             -- Prints the radio's info.\n"+
-				"\tdump             -- Dumps the radio's channels to the console.\n"+
-				"\tupload foo.csv   -- Uploads a CSV file from CHIRP to the radio.\n"+
-				"\tdownload foo.csv -- Downloads a CSV file from the radio.\n"+
-				"\traw \'ME 000\'   -- Runs a raw command and prints the result.\n"
+				"\tinfo                  -- Prints the radio's info.\n"+
+				"\tdump                  -- Dumps the radio's channels to the console.\n"+
+				"\tupload foo.csv        -- Uploads a CSV file from CHIRP to the radio.\n"+
+				"\tdownload foo.csv      -- Downloads a CSV file from the radio.\n"+
+				"\traw \'ME 000\'          -- Runs a raw command and prints the result.\n"+
+				"\trr 100 \'Knoxville\'    -- Query RadioReference starting at channel 100.\n"
 				);
 		System.out.print(
 				"Examples:\n"+
@@ -121,7 +123,6 @@ public class CommandLineInterface {
 		return JSerialCommConnection.getConnection(path);
 	}
 	
-
 	public static void main(String[] args) {
 		if (args.length < 3) {
 			usage();
@@ -170,6 +171,12 @@ public class CommandLineInterface {
 					erase(radio);
 				}else if(args[i].equals("raw")) {
 					System.out.println(radio.rawCommand(args[++i]));
+				}else if(args[i].equals("rr")) {
+					int target=Integer.parseInt(args[++i]);
+					String loc=args[++i];
+					Radio res=new RepeaterBook().queryProximity(loc, 25,  0);
+					System.out.format("Queried RadioReference for '%s' to channel %d and further.\n", loc, target);
+					Main.CopyChannels(radio,  target,  res);
 				}
 			}
 			
