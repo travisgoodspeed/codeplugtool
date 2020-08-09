@@ -1,5 +1,7 @@
 package com.kk4vcz.codeplug;
 
+import java.io.IOException;
+
 /* Hey y'all,
  * 
  * This class contains the main() method for self-testing, as well as some janky static functions
@@ -23,7 +25,16 @@ public class Main {
 		dst.setDTCSCode(src.getDTCSCode());
 		dst.setURCALL(src.getURCALL());
 	}
-
+	
+	// Utility function to copy all the channels from the second radio to the first.
+	public static void CopyChannels(Radio dst, int dsti, Radio src) throws IOException {
+		for(int i=src.getChannelMin(); i<src.getChannelMax(); i++) {
+			Channel ch=src.readChannel(i);
+			if(ch!=null)
+				dst.writeChannel(dsti++, ch);
+		}
+	}
+	
 	// Utility function to print a channel.
 	public static String RenderChannel(Channel c) {
 		String freq;

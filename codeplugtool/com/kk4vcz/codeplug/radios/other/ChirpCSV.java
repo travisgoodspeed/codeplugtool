@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter;
 
 import com.kk4vcz.codeplug.Channel;
 import com.kk4vcz.codeplug.Radio;
+import com.kk4vcz.codeplug.api.RepeaterBook;
 
 /* This handy little class implements Chirp's CSV file format,
  * which is incredibly useful for importing and exporting codeplugs.
@@ -23,8 +24,9 @@ public class ChirpCSV implements Radio {
 	
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("I should probably write a proper test case for this class.");
+		//This should test it well enough.
+		CSVChannel.main(args);
+		RepeaterBook.main(args);
 	}
 	
 	//Empty constructor with no channels.

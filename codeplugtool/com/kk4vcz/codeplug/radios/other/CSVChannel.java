@@ -44,7 +44,14 @@ public class CSVChannel implements Channel {
 		 * This is an ugly-ass shotgun parser.  It should be rewritten properly when time allows.
 		 */
 		String[] words=line.split(",");
-		setIndex(Integer.parseInt(words[0]));
+		
+		try {
+			setIndex(Integer.parseInt(words[0]));
+		}catch(NumberFormatException e) {
+			//This is very common in CSV results from the repeaterbook API.
+			System.err.format("WARNING: '%s' is an unsupported index number.  Guessing zero.\n", words[0]);
+			setIndex(0);
+		}
 		setName(words[1]);
 		setRXFrequency((long) (Double.parseDouble(words[2])*1000000.0));
 		setOffset(words[3], (long) (Double.parseDouble(words[4])*1000000.0));
@@ -62,7 +69,7 @@ public class CSVChannel implements Channel {
 		} else if(tm.equals("DTCS")) {
 			setToneMode("dcs");
 		} else {
-			System.out.format("ERROR: %s is an unsupported CSV tone mode.\n", tm);
+			System.err.format("ERROR: %s is an unsupported CSV tone mode.\n", tm);
 		}
 		
 		setMode(words[10]);
