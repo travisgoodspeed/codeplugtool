@@ -66,8 +66,8 @@ public class RepeaterBook implements RadioAPI {
 			
 			
 			// Two servers support this protocol.
-			//URL url = new URL("https://www.repeaterbook.com/repeaters/downloads/CHIRP/app_direct.php?"+ParameterStringBuilder.getParamsString(parameters));
-			URL url = new URL("http://chirp.danplanet.com/query/rb/1.0/app_direct?"+ParameterStringBuilder.getParamsString(parameters));
+			URL url = new URL("https://www.repeaterbook.com/repeaters/downloads/CHIRP/app_direct.php?"+ParameterStringBuilder.getParamsString(parameters));
+			//URL url = new URL("http://chirp.danplanet.com/query/rb/1.0/app_direct?"+ParameterStringBuilder.getParamsString(parameters));
 			
 			
 			//Begin with the simple connection.
