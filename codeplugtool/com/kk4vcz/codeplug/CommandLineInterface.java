@@ -51,7 +51,7 @@ public class CommandLineInterface {
 				"\tupload foo.csv        -- Uploads a CSV file from CHIRP to the radio.\n"+
 				"\tdownload foo.csv      -- Downloads a CSV file from the radio.\n"+
 				"\traw \'ME 000\'          -- Runs a raw command and prints the result.\n"+
-				"\trr 100 \'Knoxville\'    -- Query RadioReference starting at channel 100.\n"
+				"\trb 100 \'Knoxville\'    -- Query RepeaterBook starting at channel 100.\n"
 				);
 		System.out.print(
 				"Examples:\n"+
@@ -171,11 +171,11 @@ public class CommandLineInterface {
 					erase(radio);
 				}else if(args[i].equals("raw")) {
 					System.out.println(radio.rawCommand(args[++i]));
-				}else if(args[i].equals("rr")) {
+				}else if(args[i].equals("rb")) {
 					int target=Integer.parseInt(args[++i]);
 					String loc=args[++i];
 					Radio res=new RepeaterBook().queryProximity(loc, 25,  0);
-					System.out.format("Queried RadioReference for '%s' to channel %d and further.\n", loc, target);
+					System.out.format("Queried RepeaterBook for '%s' to channel %d and further.\n", loc, target);
 					Main.CopyChannels(radio,  target,  res);
 				}
 			}

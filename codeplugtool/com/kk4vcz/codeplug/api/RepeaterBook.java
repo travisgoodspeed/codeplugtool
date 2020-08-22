@@ -24,28 +24,88 @@ public class RepeaterBook implements RadioAPI {
 		System.out.println("Testing a simple RepeaterBook query:");
 		RepeaterBook rb=new RepeaterBook();
 		Radio res;
+		long freq;
 		
 		try {
-			res=rb.queryProximity("Knoxville, TN", 25, 0);  //Grab stations within 25 miles of Knoxville.
+			/*
+			System.out.println("33cm test");
+			res=rb.queryProximity("Knoxville, TN", 25, 915*1000000);  //Grab stations within 25 miles of Knoxville.
 			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>900*1000000: "33cm freq is too low.";
+			assert freq<1000*1000000: "33cm freq is too high.";
+			
+			System.out.println("70cm test");
+			res=rb.queryProximity("Knoxville, TN", 25, 433*1000000);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>400*1000000: "70cm freq is too low.";
+			assert freq<500*1000000: "70cm freq is too high.";
+			
+			System.out.println("220MHz test");
+			res=rb.queryProximity("Knoxville, TN", 25, 220*1000000);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>200*1000000: "220MHz freq is too low.";
+			assert freq<300*1000000: "220MHz freq is too high.";
+			
+			System.out.println("2m test");
+			res=rb.queryProximity("Knoxville, TN", 25, 145*1000000);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>100*1000000: "2m freq is too low.";
+			assert freq<200*1000000: "2m freq is too high.";
+			
+			System.out.println("4m test");
+			res=rb.queryProximity("Manchester", 200, 70*1000000);  //No 4m band in America, so we use Manchester.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>65*1000000: "4m freq is too low.";
+			assert freq<75*1000000: "4m freq is too high.";
+						
+			System.out.println("6m test");
+			res=rb.queryProximity("Knoxville, TN", 25, 55*1000000);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>70*1000000: "6m freq is too low.";
+			assert freq<50*1000000: "6m freq is too high.";
+			*/
+			
+			System.out.println("10m test");
+			res=rb.queryProximity("Knoxville, TN", 250, 29*1000000);  //Grab stations within 25 miles of Knoxville.
+			CommandLineInterface.dump(res);                 //Print them.
+			freq=res.readChannel(0).getRXFrequency();
+			assert freq>30*1000000: "10m freq is too low.";
+			assert freq<28*1000000: "10m freq is too high.";
+			
+			
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	private String freq2band(long freq) {
-		if(freq > 400000000)
+		if(freq >= 10000000000L) //10GHz band
+			return "10";
+		if(freq >= 1200000000) //1.2GHz band
+			return "12";
+		if(freq >= 900000000) //900MHz
+			return "9"; //33cm
+		if(freq >= 400000000)
 			return "4"; //400MHz
-		if(freq > 300000000)
+		if(freq >= 300000000)
 			return "3"; //300MHz, pretty much empty.
-		if(freq > 200000000)
+		if(freq >= 200000000)
 			return "2"; //220MHz  
-		if(freq > 140000000)
+		if(freq >= 140000000)
 			return "1"; //2 meters
-		if(freq >  50000000)
+		//13 is the 136.125 repeater in Khon Kean.
+		if(freq >=  70000000)
+			return "7"; //4 meters  FIXME
+		if(freq >=  50000000)
 			return "5"; //6 meters
-		if(freq >  25000000)
-			return "9"; //10 meters
+		if(freq >=  25000000)
+			return "3"; //10 meters
 		
 		if(freq>0)
 			System.err.println("Frequency "+freq+"is in an unknown repeater band.");
@@ -104,7 +164,7 @@ public class RepeaterBook implements RadioAPI {
 			    try {
 			    	CSVChannel ch=new CSVChannel(inputLine);
 			    	csvradio.writeChannel(i++,  ch);
-			    	System.out.println(inputLine);
+			    	//System.out.println(inputLine);
 			    }catch(Exception e) {
 			    	e.printStackTrace();
 			    	System.err.println("Error parsing channel: "+inputLine);
