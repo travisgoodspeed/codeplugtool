@@ -27,7 +27,6 @@ public class RepeaterBook implements RadioAPI {
 		long freq;
 		
 		try {
-			/*
 			System.out.println("33cm test");
 			res=rb.queryProximity("Knoxville, TN", 25, 915*1000000);  //Grab stations within 25 miles of Knoxville.
 			CommandLineInterface.dump(res);                 //Print them.
@@ -67,18 +66,15 @@ public class RepeaterBook implements RadioAPI {
 			res=rb.queryProximity("Knoxville, TN", 25, 55*1000000);  //Grab stations within 25 miles of Knoxville.
 			CommandLineInterface.dump(res);                 //Print them.
 			freq=res.readChannel(0).getRXFrequency();
-			assert freq>70*1000000: "6m freq is too low.";
-			assert freq<50*1000000: "6m freq is too high.";
-			*/
+			assert freq>50*1000000: "6m freq is too low.";
+			assert freq<70*1000000: "6m freq is too high.";
 			
 			System.out.println("10m test");
 			res=rb.queryProximity("Knoxville, TN", 250, 29*1000000);  //Grab stations within 25 miles of Knoxville.
 			CommandLineInterface.dump(res);                 //Print them.
 			freq=res.readChannel(0).getRXFrequency();
-			assert freq>30*1000000: "10m freq is too low.";
-			assert freq<28*1000000: "10m freq is too high.";
-			
-			
+			assert freq>28*1000000: "10m freq is too low.";
+			assert freq<30*1000000: "10m freq is too high.";
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -105,7 +101,7 @@ public class RepeaterBook implements RadioAPI {
 		if(freq >=  50000000)
 			return "5"; //6 meters
 		if(freq >=  25000000)
-			return "3"; //10 meters
+			return "29"; //10 meters
 		
 		if(freq>0)
 			System.err.println("Frequency "+freq+"is in an unknown repeater band.");
